@@ -2,11 +2,11 @@
 .vscode
 
 #eclipse
-# .settings
-# .metadata
-# .classpath
-# .project
-# build.fxbuild
+.settings
+.metadata
+.classpath
+.project
+build.fxbuild
 
 #java
 bin
