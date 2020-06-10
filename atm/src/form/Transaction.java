@@ -40,6 +40,4 @@ public class Transaction implements Serializable {
     public BigInteger getAmount() {
         return this.amount;
     }
-    
-    
 }

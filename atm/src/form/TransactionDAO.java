@@ -69,10 +69,43 @@ public class TransactionDAO {
         return null;
     }
 
+    /**
+     * 계좌 목록을 받음
+     * @return 계좌_목록
+     */
     public Account[] getAccountList() {
         return null;
     }
 
+    /**
+     * index번 째 계좌를 받아올 수 있음.
+     * @param index
+     * @return 계좌_객체
+     */
+    public Account getAccount(int index) {
+        return getAccountList()[index];
+    }
+
+    /**
+     * 계좌를 받아올 수 있음.
+     * @param accountNumber 계좌번호
+     * @return 계좌_객체
+     * @throws AccountNotFoundException
+     */
+    public Account getAccount(String accountNumber) throws AccountNotFoundException {
+        Account[] myAccounts = getAccountList();
+        for (Account account : myAccounts) {
+            if(account.getAccountNumber().equals(accountNumber)) {
+                return account;
+            }
+        }
+        throw new AccountNotFoundException("Wrong Account. Cannot find account.");
+    }
+
+    /**
+     * 거래를 요청하는 메소드.
+     * @param transaction
+     */
     public void sendTransaction(Transaction transaction) {
 
     }
