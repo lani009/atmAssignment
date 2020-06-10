@@ -31,9 +31,11 @@ public class Example {
                                                                                                // 있음.
                                                                                                // 상대방의 계좌를 찾을 때 쓰는 메소드임.
 
-                // 111-1111-111이 222-111-2222에게 1000000을 송금
+                // 111-1111-111이 222-111-2222에게 1000000을 송금하는 객체 생성
                 Transaction transaction = new Transaction(TransactionType.TRANSFER, transactionAccount, opponentAccount,
                         BigInteger.valueOf(1000000));
+
+                dao.sendTransaction(transaction);    //거래를 처리
 
             } catch (AccountNotFoundException e) {
                 // 상대방의 계좌를 못 찾았을 경우임.
