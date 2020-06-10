@@ -3,10 +3,7 @@
 
 #eclipse
 .settings/
-# .metadata/
-# .classpath/
-.project/
-build.fxbuild/
+.metadata/
 
 #java
 bin
