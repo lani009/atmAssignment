@@ -9,9 +9,8 @@ import form.Enum.BankType;
  */
 public class Account {
     private String accountNumber;
-    private String customerId;
     private BankType bankType;
-    // private BigInteger balance;
+    private BigInteger balance;
 
     /**
      * 계좌 정보 초기화
@@ -19,13 +18,13 @@ public class Account {
      * @param customerId
      * @param bankType
      */
-    public Account (String accountNumber, String customerId, BankType bankType) {
-        if(accountNumber.length() > 14 || customerId.length() > 14) {
-            throw new IllegalArgumentException("Check Account Number, Customer Id. Length Error");
+    public Account (String accountNumber, BankType bankType, BigInteger balance) {
+        if(accountNumber.length() > 14) {
+            throw new IllegalArgumentException("Check Account Number. Length Error");
         }
         this.accountNumber = accountNumber;
-        this.customerId = customerId;
         this.bankType = bankType;
+        this.balance = balance;
     }
 
     /**
@@ -37,18 +36,18 @@ public class Account {
     }
 
     /**
-     * 고객 아이디 리턴
-     * @return 고객_아이디
-     */
-    public String getCustomerId() {
-        return this.customerId;
-    }
-
-    /**
      * 은행 종류를 Enum타입으로 리턴
      * @return 은행_종류
      */
     public BankType getBankType() {
         return this.bankType;
+    }
+
+    /**
+     * 은행의 잔고 리턴
+     * @return 잔고
+     */
+    public BigInteger getBalance() {
+        return this.balance;
     }
 }

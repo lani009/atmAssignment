@@ -1,27 +1,66 @@
 package form;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.security.auth.login.AccountNotFoundException;
+import javax.security.auth.login.LoginException;
+
+import form.Enum.BankType;
+
+/**
+ * 서버와 통신하기 위한 클래스이다. 싱글톤 패턴으로 디자인되어 있으므로, login메소드를 먼저 호출해야 인스턴스를 얻을 수 있다.
+ */
 public class TransactionDAO {
     private static TransactionDAO instance = null;
+    private static ClientSocket socket = null;
 
-    private TransactionDAO() { }
-
-    public synchronized static TransactionDAO login() {
-        if(instance != null) {
-            throw new IllegalStateException("You did not logged out. Must have called logout() method before calling login() method.");
-        }
-        // TODO 로그인 로직
-        instance = new TransactionDAO();
-        return instance;
+    private TransactionDAO() {
     }
 
+    /**
+     * 로그인 메소드
+     * 로그인 성공시 객체를 리턴한다.
+     * @param id
+     * @param pw
+     * @return
+     * @throws LoginException
+     */
+    public synchronized static TransactionDAO login(String id, String pw) throws LoginException {
+        if (instance != null) {
+            throw new IllegalStateException(
+                    "You did not logged out. Must have called logout() method before calling login() method.");
+        }
+        // TODO 로그인 로직
+        ClientSocket loginSocket = new ClientSocket();
+        if(loginSocket.login(id, pw)) {
+            socket = loginSocket;
+            return instance;
+        } else {
+            throw new LoginException("Client Login Failed");
+        }
+    }
+
+    /**
+     * DAO 인스턴스 리턴. 로그인되어 있을 시에만 사용가능하다.
+     * @return TransactionDAO instance
+     */
     public static TransactionDAO getInstance() {
-        if(instance == null) {
-            throw new IllegalStateException("You Must login before calling getInstance() method.");
+        if (instance == null) {
+            throw new IllegalStateException("You Must be loggedin before calling getInstance() method.");
         }
         return instance;
     }
 
     public static void logout() {
+        if (instance == null) {
+            throw new IllegalStateException("You Must be loggedin before calling logout() method.");
+        }
         instance = null;
         // TODO 소켓 연결 초기화
     }
@@ -34,10 +73,22 @@ public class TransactionDAO {
         return null;
     }
 
-    public void sendTransaction() {
+    public void sendTransaction(Transaction transaction) {
 
     }
 
-    
-    
+    /**
+     * 계좌 정보를 찾아서 Account 객체를 리턴한다.
+     * 계좌 정보를 찾지 못할 경우 AccountNotFoundException throw
+     * @param accountNumber 계좌번호
+     * @param banktype 은행종류
+     * @return Account 계좌
+     * @throws AccountNotFoundException
+     */
+    public Account searchAccount(String accountNumber, BankType banktype) throws AccountNotFoundException {
+        // TODO
+        throw new AccountNotFoundException(String.format("Cannot Find %s %s Account", accountNumber, banktype));
+        // return null;
+    }
+
 }
