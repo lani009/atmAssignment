@@ -4,7 +4,7 @@
 #eclipse
 .settings/
 # .metadata/
-.classpath/
+# .classpath/
 .project/
 build.fxbuild/
 
