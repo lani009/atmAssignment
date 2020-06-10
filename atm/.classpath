@@ -18,5 +18,5 @@
 	<classpathentry kind="lib" path="C:/Program Files/Java/javafx-sdk-11.0.2/lib/src.zip"/>
 	<classpathentry kind="lib" path="../dependency/json-simple-1.1.1.jar"/>
 	<classpathentry kind="lib" path="../dependency/mariadb-java-client-2.6.0.jar"/>
-	<classpathentry kind="output" path="target/classes"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
