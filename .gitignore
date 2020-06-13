@@ -4,7 +4,6 @@
 #eclipse
 .settings/
 .metadata/
-.classpath
 
 #java
 bin
