@@ -6,6 +6,7 @@ import java.io.Reader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -36,6 +37,8 @@ public class Authentication {
         }
 
         try {
+            Class.forName("org.mariadb.jdbc.Driver");
+            
             String jdbcDriver = "jdbc:mariadb://" + address + ":3306/MDCBank?"
                     + "useUnicode=true&characterEncoding=utf8";
 
@@ -60,13 +63,15 @@ public class Authentication {
     public boolean login(String userId, String userPw) {
         try {
             // 쿼리 실행
-            rs = stmt.executeQuery(String.format("SELECT id, password FROM customer WHERE id=\"%s\" AND password=password(\"%s\");", userId, userPw));
+            rs = stmt.executeQuery(String.format("SELECT id, password FROM customer WHERE id=\"%s\" AND password=password(\"%s\")", userId, userPw));
             rs.first(); //처음 행
             if(rs.getString("id").equals(userId)) {
                 return true;
             } else {
                 return false;
             }
+        } catch (SQLDataException e) {
+            return false;
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {
