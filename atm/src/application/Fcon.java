@@ -18,19 +18,19 @@ import javafx.stage.Stage;
  * @author 정의철
  *
  */
-public class SampleController implements Initializable {
+public class Fcon implements Initializable {
     @FXML
-    private Button f;
+    private Button d;
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        f.setOnAction(e -> {
+        d.setOnAction(e -> {
             Parent login;
             try {
-                login = FXMLLoader.load(getClass().getResource("F.fxml"));
+                login = FXMLLoader.load(getClass().getResource("Sample.fxml"));
                 Scene scene = new Scene(login);
         
-                Stage primaryStage = (Stage)f.getScene().getWindow(); // 현재 윈도우 가져오기
+                Stage primaryStage = (Stage)d.getScene().getWindow(); // 현재 윈도우 가져오기
             
                 primaryStage.setScene(scene);
             } catch (IOException e1) {

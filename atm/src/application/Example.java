@@ -1,5 +1,6 @@
 package application;
 
+import java.io.IOException;
 import java.math.BigInteger;
 
 import javax.security.auth.login.AccountNotFoundException;
@@ -18,10 +19,10 @@ public class Example {
 
         TransactionDAO dao;
         try {
-            dao = TransactionDAO.login(id, pw); // 로그인하고 인스턴스 받아올 수 있음.
+            dao = TransactionDAO.login(id, pw, BankType.MDCBank); // 로그인하고 인스턴스 받아올 수 있음.
 
             Account[] myAccounts = dao.getAccountList(); // 나의 계좌 목록
-            Account transactionAccount = myAccounts[2]; // 내 계좌중 2번째 계좌
+            Account transactionAccount = myAccounts[2]; // 내 계좌중 3번째 계좌
             // 또는
             transactionAccount = dao.getAccount("111-1111-111"); // 내 계좌중 111-1111-111 계좌번호를 가진 계좌 객체를 받아올 수 있음
 
@@ -35,7 +36,7 @@ public class Example {
                 Transaction transaction = new Transaction(TransactionType.TRANSFER, transactionAccount, opponentAccount,
                         BigInteger.valueOf(1000000));
 
-                dao.sendTransaction(transaction);    //거래를 처리
+                dao.sendTransaction(transaction); // 거래를 처리
 
             } catch (AccountNotFoundException e) {
                 // 상대방의 계좌를 못 찾았을 경우임.
