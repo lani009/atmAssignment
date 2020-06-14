@@ -1,12 +1,6 @@
 package form;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.io.IOException;
 
 import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.LoginException;
@@ -24,21 +18,22 @@ public class TransactionDAO {
     }
 
     /**
-     * 로그인 메소드
-     * 로그인 성공시 객체를 리턴한다.
+     * 로그인 메소드 로그인 성공시 객체를 리턴한다.
+     * 
      * @param id
      * @param pw
+     * @param 은행종류
      * @return
      * @throws LoginException
      */
-    public synchronized static TransactionDAO login(String id, String pw) throws LoginException {
+    public synchronized static TransactionDAO login(String id, String pw, BankType bankType) throws LoginException {
         if (instance != null) {
             throw new IllegalStateException(
                     "You did not logged out. Must have called logout() method before calling login() method.");
         }
-        // TODO 로그인 로직
+        // 로그인 성공시 객체 리턴
         ClientSocket loginSocket = new ClientSocket();
-        if(loginSocket.login(id, pw)) {
+        if (loginSocket.login(id, pw, bankType)) {
             socket = loginSocket;
             return instance;
         } else {
@@ -48,6 +43,7 @@ public class TransactionDAO {
 
     /**
      * DAO 인스턴스 리턴. 로그인되어 있을 시에만 사용가능하다.
+     * 
      * @return TransactionDAO instance
      */
     public static TransactionDAO getInstance() {
@@ -57,14 +53,22 @@ public class TransactionDAO {
         return instance;
     }
 
-    public static void logout() {
+    /**
+     * 로그아웃. 객체를 null로 초기화함
+     * @throws IOException
+     */
+    public static void logout() throws IOException {
         if (instance == null) {
             throw new IllegalStateException("You Must be loggedin before calling logout() method.");
         }
         instance = null;
-        // TODO 소켓 연결 초기화
+        socket.close();
     }
 
+    /**
+     * 거래 내역을 배열 형태로 리턴
+     * @return 거래_내역
+     */
     public Transaction[] getTransactionList() {
         return null;
     }
