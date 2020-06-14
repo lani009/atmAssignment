@@ -21,17 +21,18 @@ public class ServerController {
 
             // Thread Pool 생성
             ExecutorService receiver = Executors.newCachedThreadPool();
-
             while (true) {
+                Socket client = null;
                 try {
-                    Socket client = server.accept();    // client Accept
+                    client = server.accept();    // client Accept
                     System.out.printf("Client Connected. IP: %s\n", client.getRemoteSocketAddress().toString());
                     client.setKeepAlive(true);  // TCP Kepp-Alive = true
 
                     // Thread 실행
                     receiver.execute(new DatabaseDAO(new ClientConnectionSocket(client)));
                 } catch (LoginException e) {
-                    e.printStackTrace();
+                    client.getOutputStream().write(0);  // 로그인 실패 메시지
+                    client.close(); // 로그인 실패시 소켓 연결 close
                 }
             }
         } catch (Exception e) {

@@ -103,7 +103,7 @@ public class ClientSocket implements Closeable {
             send("login");
             send(id);
             send(pw);
-            send(bankType.toString());
+            send(bankType.name());
             return br.readLine().equals("login success");
         } catch (Exception e) {
             e.printStackTrace();

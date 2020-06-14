@@ -13,7 +13,7 @@ import java.net.Socket;
 import javax.security.auth.login.LoginException;
 
 import form.Transaction;
-import server.Enum.DAOType;
+import server.Enum.RequsetType;
 
 /**
  * 클라이언트와 직접적으로 연결되어 통신하는 클래스
@@ -84,15 +84,23 @@ public class ClientConnectionSocket implements Closeable {
         return Authentication.getInstance().login(recvReader.readLine(), recvReader.readLine(), recvReader.readLine());
     }
 
-    public DAOType getPhase() {
+    /**
+     * 서버와 통신하여 요청 사항을 파악한다.
+     * @return 요청
+     */
+    public RequsetType getPhase() {
         try {
             String input = recv();
             if(input.equals("transaction")) {
-
-            } else if(input.equals("get transaction list")) {
-
-            } else if(input.equals("anObject")) {
-
+                return RequsetType.TRANSACTION;
+            } else if(input.equals("get my account list")) {
+                return RequsetType.GETMYACCOUNTLIST;
+            } else if(input.equals("get my transaction list")) {
+                return RequsetType.GETMYTRANSACTIONLIST;
+            } else if(input.equals("search account")) {
+                return RequsetType.SEARCHACCOUNT;
+            } else if(input.equals("0") || input.equals("disconnect")) {
+                return RequsetType.DISCONNECT;
             }
         } catch (IOException e) {
             e.printStackTrace();

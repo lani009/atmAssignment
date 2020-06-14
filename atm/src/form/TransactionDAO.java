@@ -50,6 +50,11 @@ public class TransactionDAO {
             socket = loginSocket;
             return instance;
         } else {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             throw new LoginException("Client Login Failed");
         }
     }
