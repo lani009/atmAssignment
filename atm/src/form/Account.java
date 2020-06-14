@@ -1,5 +1,6 @@
 package form;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 
 import form.Enum.BankType;
@@ -7,7 +8,8 @@ import form.Enum.BankType;
 /**
  * 계좌 정보를 담고 있는 객체이다.
  */
-public class Account {
+public class Account implements Serializable {
+    private static final long serialVersionUID = 3835905242342972326L;  // 시리얼 버전
     private String accountNumber;
     private BankType bankType;
     private BigInteger balance;

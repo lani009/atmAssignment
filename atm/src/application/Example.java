@@ -1,7 +1,7 @@
 package application;
 
-import java.io.IOException;
 import java.math.BigInteger;
+import java.rmi.server.ServerNotActiveException;
 
 import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.LoginException;
@@ -13,7 +13,7 @@ import form.Enum.BankType;
 import form.Enum.TransactionType;
 
 public class Example {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ServerNotActiveException {
         String id = "asdf";
         String pw = "asdf";
 
