@@ -24,7 +24,7 @@ import form.Enum.BankType;
 import server.Enum.RequsetType;
 
 /**
- * 데이터베이스와 직접적으로 통신하여 은행 업무를 처리한다.
+ * 데이터베이스와 직접적으로 통신하여 클라이언트의 요청을 수행한다.
  */
 public class DatabaseDAO implements Runnable {
     private ClientConnectionSocket client;
@@ -33,7 +33,7 @@ public class DatabaseDAO implements Runnable {
 
 
     /**
-     * client socket받아와서 역할 수행
+     * client socket 받아와서 필드 변수 초기화. DBProperties.json을 파싱하여 데이터베이스의 주소와 id, pw를 가져온다.
      */
     public DatabaseDAO(ClientConnectionSocket client) {
         JSONParser parser = new JSONParser();
@@ -119,6 +119,7 @@ public class DatabaseDAO implements Runnable {
 
     /**
      * 은행 별 DBMS 접속 주소를 반환한다.
+     * @return database_dbms_address
      */
     private String getSqlAddress(BankType bankType) {
         return String.format("jdbc:mariadb://%s:3306/%s?"
