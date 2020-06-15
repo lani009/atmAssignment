@@ -60,7 +60,7 @@ public class ClientConnectionSocket implements Closeable {
 
     /**
      * 문자열 전송
-     * @param 문자열
+     * @param msg 문자열
      */
     public void send(String msg) {
         try {

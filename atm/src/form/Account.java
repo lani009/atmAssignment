@@ -17,8 +17,8 @@ public class Account implements Serializable {
     /**
      * 계좌 정보 초기화
      * @param accountNumber
-     * @param customerId
      * @param bankType
+     * @param balance
      */
     public Account (String accountNumber, BankType bankType, BigInteger balance) {
         if(accountNumber.length() > 14) {

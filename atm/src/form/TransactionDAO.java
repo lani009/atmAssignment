@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.rmi.server.ServerNotActiveException;
+import java.util.ArrayList;
 import java.util.Base64;
 
 import javax.security.auth.login.AccountNotFoundException;
@@ -136,20 +137,17 @@ public class TransactionDAO {
     public Account[] getAccountList() throws NumberFormatException, ServerNotActiveException {
         try {
             socket.send("get my account list");
-            int length = Integer.parseInt(socket.recv());   // 나의 계좌 개수를 받아옴
+            String serialized;  // 직렬화된 String이 저장될 변수
 
-            Account[] accountList = new Account[length];
-
-            for (int i = 0; i < accountList.length; i++) {
+            ArrayList<Account> accountArrayList = new ArrayList<>();
+            while((serialized = socket.recv()) != "-1") {
                 try {
-                    String serialized = socket.recv();  // 직렬화된 String
-    
                     byte[] serializedMember = Base64.getDecoder().decode(serialized);   // Base64 -> 바이트 배열로 변환
                     try (ByteArrayInputStream bais = new ByteArrayInputStream(serializedMember);
                             ObjectInputStream ois = new ObjectInputStream(bais)) {
         
                         Object objectMember = ois.readObject();
-                        accountList[i] = (Account) objectMember;   // 역직렬화하여 배열에 저장
+                        accountArrayList.add((Account) objectMember);   // 역직렬화하여 Array List에 저장
 
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
@@ -158,6 +156,8 @@ public class TransactionDAO {
                     e.printStackTrace();
                 }
             }
+
+            Account[] accountList = accountArrayList.toArray(new Account[accountArrayList.size()]); // Account 배열 형태로 변환한다.
             return accountList;
         } catch (IOException e) {
             e.printStackTrace();

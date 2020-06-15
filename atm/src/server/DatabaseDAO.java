@@ -1,9 +1,11 @@
 package server;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,6 +18,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import form.Account;
 import form.Transaction;
 import form.Enum.BankType;
 import server.Enum.RequsetType;
@@ -69,7 +72,7 @@ public class DatabaseDAO implements Runnable {
 
                 case GETMYACCOUNTLIST:
                     sendAccountList();
-            
+            //TODO
                 default:
                     break;
             }
@@ -78,17 +81,37 @@ public class DatabaseDAO implements Runnable {
     }
 
     /**
-     * 고객에게 계좌 목록을 전송한다..
+     * 고객에게 자신의 계좌 목록을 전송한다.
      */
     private void sendAccountList() {
         try {
             Connection conn = getConnection(client.getUserBankType());
+            // 데이터베이스로 부터 고객의 계좌 정보만을 가져오기 위한 sql문
             PreparedStatement pstmt = conn.prepareStatement(
                 "SELECT accountNumber, balance FROM accounts WHERE id = '?'"
             );
             pstmt.setString(1, client.getUserId());
             ResultSet rs = pstmt.executeQuery();
-            // TODO Transaction 배열 형태로 리턴
+
+            while(rs.next()) {
+                // 쿼리 결과로 부터 계좌의 정보를 받아온다.
+                String accountNumber = rs.getString("accountNumber");
+                String balance = rs.getString("balance");
+
+                // 계좌 객체를 생성한다.
+                Account account = new Account(accountNumber, client.getUserBankType(), BigInteger.valueOf(Long.parseLong(balance)));
+
+                try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+                    oos.writeObject(account);
+                    // serialized -> 직렬화된 account 객체 
+                    byte[] serialized = baos.toByteArray();
+                    client.send(Base64.getEncoder().encodeToString(serialized)); // 바이트 배열로 생성된 직렬화 데이터를 base64로 변환
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } 
+            }
+            client.send("-1");  // 계좌 전송이 끝났음을 클라이언트에게 알린다.
         } catch (SQLException e) {
             e.printStackTrace();
         }
