@@ -1,7 +1,5 @@
 package server;
 
-import form.Enum.BankType;
-
 public class Test {
     public static void main(String[] args) {
         Authentication a = Authentication.getInstance();
