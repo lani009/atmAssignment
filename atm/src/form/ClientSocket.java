@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.rmi.server.ServerNotActiveException;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -77,15 +78,18 @@ public class ClientSocket implements Closeable {
 
     /**
      * String을 전달 받기위한 메소드
+     * 
      * @return
      * @throws IOException
+     * @throws ServerNotActiveException
      */
-    public String recv() throws IOException {
-        return br.readLine();
-    }
-
-    public Transaction recvTransaction() {
-        return null;
+    public String recv() throws IOException, ServerNotActiveException {
+        String line = br.readLine();
+        if(line.equals("0") || line.equals("disconnect")) {
+            close();    // 0 or disconnect -> socket close
+            throw new ServerNotActiveException("Server closed");
+        }
+        return line;
     }
 
     /**
@@ -99,7 +103,7 @@ public class ClientSocket implements Closeable {
             send("login");
             send(id);
             send(pw);
-            send(bankType.toString());
+            send(bankType.name());
             return br.readLine().equals("login success");
         } catch (Exception e) {
             e.printStackTrace();

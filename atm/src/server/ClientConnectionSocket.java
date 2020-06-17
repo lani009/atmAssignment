@@ -13,7 +13,8 @@ import java.net.Socket;
 import javax.security.auth.login.LoginException;
 
 import form.Transaction;
-import server.Enum.DAOType;
+import form.Enum.BankType;
+import server.Enum.RequsetType;
 
 /**
  * 클라이언트와 직접적으로 연결되어 통신하는 클래스
@@ -25,6 +26,7 @@ public class ClientConnectionSocket implements Closeable {
     private InputStream recv;
     private BufferedReader recvReader;
     private BufferedWriter sendWriter;
+    private String userBank, userId;
 
     /**
      * Client와 통신할 수 있게 한다. 로그인 실패시 LoginException 발생
@@ -58,7 +60,7 @@ public class ClientConnectionSocket implements Closeable {
 
     /**
      * 문자열 전송
-     * @param 문자열
+     * @param msg 문자열
      */
     public void send(String msg) {
         try {
@@ -81,18 +83,42 @@ public class ClientConnectionSocket implements Closeable {
      * Authentication 객체와 통신하여 로그인 성공, 실패 여부를 리턴
     */
     private boolean login() throws IOException {
-        return Authentication.getInstance().login(recvReader.readLine(), recvReader.readLine(), recvReader.readLine());
+        return Authentication.getInstance().login(userId = recvReader.readLine(), recvReader.readLine(), userBank = recvReader.readLine());
     }
 
-    public DAOType getPhase() {
+    /**
+     * 해당 유저가 사용하는 은행의 종류 반환
+     * @return bank type
+     */
+    public BankType getUserBankType() {
+        return BankType.valueOf(userBank);
+    }
+
+    /**
+     * 해당 유저의 ID 반환
+     * @return
+     */
+    public String getUserId() {
+        return this.userId;
+    }
+
+    /**
+     * 서버와 통신하여 요청 사항을 파악한다.
+     * @return 요청
+     */
+    public RequsetType getPhase() {
         try {
             String input = recv();
             if(input.equals("transaction")) {
-
-            } else if(input.equals("get transaction list")) {
-
-            } else if(input.equals("anObject")) {
-
+                return RequsetType.TRANSACTION;
+            } else if(input.equals("get my account list")) {
+                return RequsetType.GETMYACCOUNTLIST;
+            } else if(input.equals("get my transaction list")) {
+                return RequsetType.GETMYTRANSACTIONLIST;
+            } else if(input.equals("search account")) {
+                return RequsetType.SEARCHACCOUNT;
+            } else if(input.equals("0") || input.equals("disconnect")) {
+                return RequsetType.DISCONNECT;
             }
         } catch (IOException e) {
             e.printStackTrace();

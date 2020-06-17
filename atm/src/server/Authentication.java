@@ -17,9 +17,6 @@ public class Authentication {
     private String id;
     private String pw;
     private String address;
-    Connection conn = null;
-    Statement stmt = null;
-    ResultSet rs = null;
 
     private Authentication() {
         JSONParser parser = new JSONParser();
@@ -39,17 +36,7 @@ public class Authentication {
         try {
             // mariadb JDBC controller 동적으로 불러옴.
             Class.forName("org.mariadb.jdbc.Driver");
-
-            String jdbcDriver = "jdbc:mariadb://" + address + ":3306/MDCBank?"
-                    + "useUnicode=true&characterEncoding=utf8";
-
-            // 커넥션 생성
-            conn = DriverManager.getConnection(jdbcDriver, id, pw);
-
-            // Statement 생성
-            stmt = conn.createStatement();
-
-        } catch (Exception e) {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -62,9 +49,12 @@ public class Authentication {
      * @return
      */
     public boolean login(String userId, String userPw, String bankType) {
-        try {
+        String jdbcDriver = String.format("jdbc:mariadb://%s:3306/%s?"
+        + "useUnicode=true&characterEncoding=utf8", address, bankType);
+        try(Connection conn = DriverManager.getConnection(jdbcDriver, id, pw);
+                Statement stmt = conn.createStatement()) {
             // 쿼리 실행
-            rs = stmt.executeQuery(String.format(
+            ResultSet rs = stmt.executeQuery(String.format(
                     "SELECT id, password FROM customer WHERE id=\"%s\" AND password=password(\"%s\")", userId, userPw));
             rs.first(); // 처음 행
             if (rs.getString("id").equals(userId)) {
