@@ -87,42 +87,47 @@ public class TransactionDAO {
         socket = null;
     }
 
+    public Object getObject(String objString) {
+        byte[] serializedMember = Base64.getDecoder().decode(objString);   // Base64 -> 바이트 배열로 변환
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(serializedMember);
+                ObjectInputStream ois = new ObjectInputStream(bais)) {
+
+            Object objectMember = ois.readObject(); // 역직렬화
+            return objectMember;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
-     * 데이터베이스로 부터 나의 거래 내역을 리턴. &#10;<strong>서버랑 직접적으로 통신하는 메소드이므로, 너무 많이 호출하지
+     * 데이터베이스로 부터 나의 거래 내역을 리턴. 만약 거래 내역이 없다면, null을 리턴한다. &#10;<strong>서버랑 직접적으로 통신하는 메소드이므로, 너무 많이 호출하지
      * 말것!<strong/>
      * 
      * @return 거래_내역
      * @throws ServerNotActiveException
      */
+    @SuppressWarnings ("unchecked") // Serializable type unchecked 경고 무시
     public Transaction[] getTransactionList() throws ServerNotActiveException {
         try {
             socket.send("get my transaction list");
-            int length = Integer.parseInt(socket.recv());   // 나의 계좌 개수를 받아옴
 
-            Transaction[] transactionList = new Transaction[length];
-
-            for (int i = 0; i < transactionList.length; i++) {
-                try {
-                    String serialized = socket.recv();  // 직렬화된 String
-    
-                    byte[] serializedMember = Base64.getDecoder().decode(serialized);   // Base64 -> 바이트 배열로 변환
-                    try (ByteArrayInputStream bais = new ByteArrayInputStream(serializedMember);
-                            ObjectInputStream ois = new ObjectInputStream(bais)) {
-        
-                        Object objectMember = ois.readObject();
-                        transactionList[i] = (Transaction) objectMember;   // 역직렬화하여 배열에 저장
-
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            String oString = socket.recv();
+            if(oString.equals("no such data")) {
+                return null;
             }
-            return transactionList;
+            Object objectMember = getObject(oString);  // 직렬화된 String
+            ArrayList<Transaction> list = (ArrayList<Transaction>) objectMember;   
+            Transaction[] transactionList = new Transaction[list.size()];
+            list.toArray(transactionList);
+            return transactionList; // Transaction List 리턴
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return null;
     }
 
@@ -141,20 +146,9 @@ public class TransactionDAO {
 
             ArrayList<Account> accountArrayList = new ArrayList<>();
             while((serialized = socket.recv()) != "-1") {
-                try {
-                    byte[] serializedMember = Base64.getDecoder().decode(serialized);   // Base64 -> 바이트 배열로 변환
-                    try (ByteArrayInputStream bais = new ByteArrayInputStream(serializedMember);
-                            ObjectInputStream ois = new ObjectInputStream(bais)) {
-        
-                        Object objectMember = ois.readObject();
-                        accountArrayList.add((Account) objectMember);   // 역직렬화하여 Array List에 저장
 
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Object objectMember = getObject(serialized);
+                accountArrayList.add((Account) objectMember);   // Array List에 저장
             }
 
             Account[] accountList = accountArrayList.toArray(new Account[accountArrayList.size()]); // Account 배열 형태로 변환한다.
@@ -244,16 +238,11 @@ public class TransactionDAO {
                 throw new AccountNotFoundException(
                         String.format("Cannot Find %s %s Account", accountNumber, banktype.name()));
             }
-            byte[] serializedMember = Base64.getDecoder().decode(serialized);   // Base64 -> 바이트 배열로 변환
-            try (ByteArrayInputStream bais = new ByteArrayInputStream(serializedMember);
-                    ObjectInputStream ois = new ObjectInputStream(bais)) {
 
-                Object objectMember = ois.readObject();
-                Account account = (Account) objectMember;   // 역직렬화
-                return account;
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            Object objectMember = getObject(serialized);
+            Account account = (Account) objectMember;   // 역직렬화
+            return account;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
