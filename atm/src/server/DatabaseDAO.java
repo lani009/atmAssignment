@@ -6,12 +6,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Base64;
 
 import org.json.simple.JSONObject;
@@ -21,6 +23,7 @@ import org.json.simple.parser.ParseException;
 import form.Account;
 import form.Transaction;
 import form.Enum.BankType;
+import form.Enum.TransactionType;
 import server.Enum.RequsetType;
 
 /**
@@ -72,12 +75,106 @@ public class DatabaseDAO implements Runnable {
 
                 case GETMYACCOUNTLIST:
                     sendAccountList();
+                    break;
+
+                case GETMYTRANSACTIONLIST:
+                    getMyTransactionList();
+                    break;
+
+                case SEARCHACCOUNT:
+                    break;
+
             //TODO
                 default:
                     break;
             }
         }
 
+    }
+
+    /**
+     * 은행 별 DBMS 접속 주소를 반환한다.
+     * @return database_dbms_address
+     */
+    private String getSqlAddress(BankType bankType) {
+        return String.format("jdbc:mariadb://%s:3306/%s?"
+        + "useUnicode=true&characterEncoding=utf8", address, bankType.toString());
+    }
+
+    /**
+     * 은행별로 알맞은 Connection을 반환한다.
+     * 
+     * @throws SQLException
+     */
+    private Connection getConnection(BankType bankType) throws SQLException {
+        if(conn[bankType.toInt() - 1] == null) {
+            // 만약 해당 은행에 대한 Connection이 열려있지 않다면, Connnection을 생성해준다.
+            conn[bankType.toInt() - 1] = DriverManager.getConnection(getSqlAddress(bankType), id, pw);
+            return conn[bankType.toInt() - 1];
+        } else {
+            return conn[bankType.toInt() - 1];
+        }
+    }
+
+    /**
+     * 고객의 거래 내역을 불러오기 위함.
+     */
+    private void getMyTransactionList() {
+        try {
+            String accountNumber = client.recv();   // 계좌번호 받아옴.
+            Connection conn = getConnection(client.getUserBankType());
+            PreparedStatement pstmt = conn.prepareStatement(
+                "SELECT * FROM history WHERE origin=? or destination=?"
+            );
+            pstmt.setString(1, accountNumber);
+            pstmt.setString(2, accountNumber);
+
+            ResultSet rs = pstmt.executeQuery();
+            ArrayList<Transaction> list = new ArrayList<>();    // 거래 정보를 담을 리스트 선언
+
+            // result set에 담긴 내용을 ArrayList에 담는다.
+            while(rs.next()) {
+                if(rs.getString(1).equals("ATM")) {
+                    // 입금의 경우
+                    list.add(new Transaction(TransactionType.DEPOSIT,
+                                new Account("ATM", client.getUserBankType(), BigInteger.ZERO),
+                                new Account(rs.getString(2), client.getUserBankType(), rs.getBigDecimal(6).toBigInteger()),
+                                rs.getBigDecimal(5).toBigInteger()));
+
+                } else if(rs.getString(2).equals("ATM")) {
+                    // 출금의 경우
+                    list.add(new Transaction(TransactionType.WITHDRAWL,
+                                new Account(rs.getString(1), client.getUserBankType(), rs.getBigDecimal(6).toBigInteger()),
+                                new Account("ATM", client.getUserBankType(), BigInteger.ZERO),
+                                rs.getBigDecimal(5).toBigInteger()));
+                } else if(rs.getString(1).equals(accountNumber)){
+                    //계좌 이체의 경우 (나 -> 상대)
+                    list.add(new Transaction(TransactionType.TRANSFER,
+                                new Account(rs.getString(1), BankType.valueOf(rs.getString(3)), rs.getBigDecimal(6).toBigInteger()),
+                                new Account(rs.getString(2), BankType.valueOf(rs.getString(4)), BigInteger.ZERO),
+                                rs.getBigDecimal(5).toBigInteger()));
+
+                } else {
+                    // 계좌 이체의 경우 (상대 -> 나)
+                    list.add(new Transaction(TransactionType.TRANSFER,
+                                new Account(rs.getString(1), BankType.valueOf(rs.getString(3)), BigInteger.ZERO),
+                                new Account(rs.getString(2), BankType.valueOf(rs.getString(4)), rs.getBigDecimal(6).toBigInteger()),
+                                rs.getBigDecimal(5).toBigInteger()));
+                }
+            }
+            // ArrayList 직렬화 후 클라이언트에게 전송한다.
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+                    oos.writeObject(list);
+                    // serialized -> 직렬화된 list 객체 
+                    byte[] serialized = baos.toByteArray();
+                    client.send(Base64.getEncoder().encodeToString(serialized)); // 바이트 배열로 생성된 직렬화 데이터를 base64로 변환 후 전송
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -118,33 +215,9 @@ public class DatabaseDAO implements Runnable {
     }
 
     /**
-     * 은행 별 DBMS 접속 주소를 반환한다.
-     * @return database_dbms_address
-     */
-    private String getSqlAddress(BankType bankType) {
-        return String.format("jdbc:mariadb://%s:3306/%s?"
-        + "useUnicode=true&characterEncoding=utf8", address, bankType.toString());
-    }
-
-    /**
-     * 은행별로 알맞은 Connection을 반환한다.
-     * 
-     * @throws SQLException
-     */
-    private Connection getConnection(BankType bankType) throws SQLException {
-        if(conn[bankType.toInt() - 1] == null) {
-            // 만약 해당 은행에 대한 Connection이 열려있지 않다면, Connnection을 생성해준다.
-            conn[bankType.toInt() - 1] = DriverManager.getConnection(getSqlAddress(bankType), id, pw);
-            return conn[bankType.toInt() - 1];
-        } else {
-            return conn[bankType.toInt() - 1];
-        }
-    }
-
-    /**
      * Transaction을 처리하기 위한 메소드
      */
-    private void processTransaction() {
+    private synchronized void processTransaction() {
         try {
             String serialized = client.recv();  // 직렬화된 String
 
@@ -162,16 +235,30 @@ public class DatabaseDAO implements Runnable {
                     case DEPOSIT:
                     // 입금하는 경우이다. ATM -> 은행계좌
                         toConnection = getConnection(transaction.getTo().getBankType());
-// TODO 계좌거래 내역에 추가하는 DB코드
+                        
                         // 고객의 계좌 잔고를 업데이트 하는 Statement를 준비
                         pstmtTo = toConnection.prepareStatement(
                             "UPDATE accounts SET balance = balance + ? WHERE accountNumber = '?'"
                         );
-                        pstmtTo.setString(1, amount.toString());
+                        pstmtTo.setBigDecimal(1, new BigDecimal(amount));
                         pstmtTo.setString(2, transaction.getTo().getAccountNumber());
 
                         // 쿼리 실행
                         pstmtTo.executeUpdate();
+
+                        // 거래내역에 추가
+                        pstmtTo = toConnection.prepareStatement(
+                            "INSERT INTO history VALUES (?, ?, ?, ?, ?, ?);"
+                        );
+                        pstmtTo.setString(1, transaction.getFrom().getAccountNumber());
+                        pstmtTo.setString(2, transaction.getTo().getAccountNumber());
+                        pstmtTo.setString(3, transaction.getFrom().getBankType().name());
+                        pstmtTo.setString(4, transaction.getTo().getBankType().name());
+                        pstmtTo.setBigDecimal(5, new BigDecimal(amount));
+                        pstmtTo.setBigDecimal(6, new BigDecimal(transaction.getTo().getBalance().add(amount)));
+                        pstmtTo.executeUpdate();
+
+                        pstmtTo.close();
                         break;
                 
                     case WITHDRAWL:
@@ -180,13 +267,27 @@ public class DatabaseDAO implements Runnable {
 
                         // 고객의 계좌 잔고를 업데이트 하는 Statement를 준비
                         pstmtFrom = fromConnection.prepareStatement(
-                            "UPDATE accounts SET balance = balance - ? WHERE accountNumber = '?'"
+                            "UPDATE accounts SET balance = balance - ? WHERE accountNumber = ?"
                         );
-                        pstmtFrom.setString(1, amount.toString());
+                        pstmtFrom.setBigDecimal(1, new BigDecimal(amount));
                         pstmtFrom.setString(2, transaction.getFrom().getAccountNumber());
 
                         // 쿼리 실행
                         pstmtFrom.executeUpdate();
+
+                        // 거래내역에 추가
+                        pstmtFrom = fromConnection.prepareStatement(
+                            "INSERT INTO history VALUES (?, ?, ?, ?, ?, ?);"
+                        );
+                        pstmtFrom.setString(1, transaction.getFrom().getAccountNumber());
+                        pstmtFrom.setString(2, transaction.getTo().getAccountNumber());
+                        pstmtFrom.setString(3, transaction.getFrom().getBankType().name());
+                        pstmtFrom.setString(4, transaction.getTo().getBankType().name());
+                        pstmtFrom.setBigDecimal(5, new BigDecimal(amount.negate()));
+                        pstmtFrom.setBigDecimal(6, new BigDecimal(transaction.getTo().getBalance().subtract(amount)));
+                        pstmtFrom.executeUpdate();
+
+                        pstmtFrom.close();
                         break;
 
                     case TRANSFER:
@@ -196,18 +297,45 @@ public class DatabaseDAO implements Runnable {
 
                         // 고객의 계좌 잔고를 업데이트 하는 Statement를 준비
                         pstmtFrom = fromConnection.prepareStatement(
-                            "UPDATE accounts SET balance = balance - ? WHERE accountNumber = '?'"
+                            "UPDATE accounts SET balance = balance - ? WHERE accountNumber = ?"
                         );
-                        pstmtFrom.setString(1, amount.toString());
+                        pstmtFrom.setBigDecimal(1, new BigDecimal(amount));
                         pstmtFrom.setString(2, transaction.getFrom().getAccountNumber());
                         pstmtFrom.executeUpdate();  // 쿼리 실행
 
                         pstmtTo = toConnection.prepareStatement(
-                            "UPDATE accounts SET balance = balance + ? WHERE accountNumber = '?'"
+                            "UPDATE accounts SET balance = balance + ? WHERE accountNumber = ?"
                         );
-                        pstmtTo.setString(1, amount.toString());
+                        pstmtTo.setBigDecimal(1, new BigDecimal(amount));
                         pstmtTo.setString(2, transaction.getTo().getAccountNumber());
                         pstmtTo.executeUpdate();    // 쿼리 실행
+
+                        // 거래내역에 추가
+                        pstmtFrom = fromConnection.prepareStatement(
+                            "INSERT INTO history VALUES (?, ?, ?, ?, ?, ?);"
+                        );
+                        pstmtFrom.setString(1, transaction.getFrom().getAccountNumber());
+                        pstmtFrom.setString(2, transaction.getTo().getAccountNumber());
+                        pstmtFrom.setString(3, transaction.getFrom().getBankType().name());
+                        pstmtFrom.setString(4, transaction.getTo().getBankType().name());
+                        pstmtFrom.setBigDecimal(5, new BigDecimal(amount));
+                        pstmtFrom.setBigDecimal(6, new BigDecimal(transaction.getFrom().getBalance().subtract(amount)));
+                        pstmtFrom.executeUpdate();
+
+                        // 거래내역에 추가
+                        pstmtTo = toConnection.prepareStatement(
+                            "INSERT INTO history VALUES (?, ?, ?, ?, ?);"
+                        );
+                        pstmtTo.setString(1, transaction.getFrom().getAccountNumber());
+                        pstmtTo.setString(2, transaction.getTo().getAccountNumber());
+                        pstmtTo.setString(3, transaction.getFrom().getBankType().name());
+                        pstmtTo.setString(4, transaction.getTo().getBankType().name());
+                        pstmtTo.setBigDecimal(5, new BigDecimal(amount));
+                        pstmtTo.setBigDecimal(6, new BigDecimal(amount.add(transaction.getTo().getBalance())));
+                        pstmtTo.executeUpdate();
+
+                        pstmtFrom.close();
+                        pstmtTo.close();
 
                         break;
                 }
