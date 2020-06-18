@@ -226,7 +226,7 @@ public class TransactionDAO {
             socket.send("search account");
             socket.send(accountNumber);
             socket.send(banktype.name());
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

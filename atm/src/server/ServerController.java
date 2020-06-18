@@ -19,8 +19,8 @@ public class ServerController {
 
             System.out.printf("Server Init. %d port bind.\n", port.toString());
 
-            // Thread Pool 생성
-            ExecutorService receiver = Executors.newCachedThreadPool();
+            // Thread Pool 생성, 스레드 개수 10개
+            ExecutorService receiver = Executors.newFixedThreadPool(10);
             while (true) {
                 Socket client = null;
                 try {

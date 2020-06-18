@@ -6,7 +6,7 @@ import java.math.BigInteger;
 import form.Enum.BankType;
 
 /**
- * 계좌 정보를 담고 있는 객체이다.
+ * "계좌"를 표현한 클래스이다. 계좌번호, 사용은행, 잔고를 담고 있으며, Serializable하다.
  */
 public class Account implements Serializable {
     private static final long serialVersionUID = 3835905242342972326L;  // 시리얼 버전
@@ -22,6 +22,7 @@ public class Account implements Serializable {
      */
     public Account (String accountNumber, BankType bankType, BigInteger balance) {
         if(accountNumber.length() > 14) {
+            // 계좌번호는 14자리 제한. 넘는 경우 예외를 발생시킨다.
             throw new IllegalArgumentException("Check Account Number. Length Error");
         }
         this.accountNumber = accountNumber;

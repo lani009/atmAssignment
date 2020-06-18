@@ -33,7 +33,7 @@ import server.Enum.RequsetType;
 public class DatabaseDAO implements Runnable, Closeable {
     private ClientConnectionSocket client;
     private String id, pw, address;
-    private Connection[] conn = new Connection[BankType.values().length]; // 은행의 개수만큼 Connection공간 할당
+    private volatile Connection[] conn = new Connection[BankType.values().length]; // 은행의 개수만큼 Connection공간 할당
 
     /**
      * client socket 받아와서 필드 변수 초기화. DBProperties.json을 파싱하여 데이터베이스의 주소와 id, pw를
@@ -113,7 +113,7 @@ public class DatabaseDAO implements Runnable, Closeable {
      * 
      * @throws SQLException
      */
-    private Connection getConnection(BankType bankType) throws SQLException {
+    private synchronized Connection getConnection(BankType bankType) throws SQLException {
         if (conn[bankType.toInt() - 1] == null) {
             // 만약 해당 은행에 대한 Connection이 열려있지 않다면, Connnection을 생성해준다.
             conn[bankType.toInt() - 1] = DriverManager.getConnection(getSqlAddress(bankType), id, pw);
