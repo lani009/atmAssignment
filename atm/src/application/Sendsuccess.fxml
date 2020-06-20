@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="412.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SendsuccessController">
+   <children>
+      <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="553.0" prefWidth="396.0">
+         <center>
+            <AnchorPane prefHeight="372.0" prefWidth="410.0" BorderPane.alignment="CENTER">
+               <children>
+                  <GridPane layoutX="18.0" prefHeight="218.0" prefWidth="365.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text fill="#7a3ada" strokeType="OUTSIDE" strokeWidth="0.0" text="Bank" textAlignment="CENTER" wrappingWidth="368.4892578125" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="Comic Sans MS" size="36.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#912fc9" strokeType="OUTSIDE" strokeWidth="0.0" text="Account Number" textAlignment="CENTER" wrappingWidth="365.4892578125" GridPane.rowIndex="3">
+                           <font>
+                              <Font name="Comic Sans MS Italic" size="36.0" />
+                           </font>
+                        </Text>
+                        <Label fx:id="Account" alignment="CENTER" prefHeight="56.0" prefWidth="365.0" text="계좌 번호" GridPane.rowIndex="4">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="name" alignment="CENTER" prefHeight="55.0" prefWidth="367.0" text="은행 이름" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </GridPane>
+                  <Label fx:id="money" alignment="CENTER" layoutX="143.0" layoutY="228.0" prefHeight="36.0" prefWidth="246.0" text="예금액">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="balance" alignment="CENTER" layoutX="143.0" layoutY="291.0" prefHeight="33.0" prefWidth="239.0" text="잔액">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextArea layoutX="2.0" layoutY="220.0" prefHeight="152.0" prefWidth="132.0" />
+                  <Text fill="#291ec9" layoutX="18.0" layoutY="313.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Balance" wrappingWidth="113.109375">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#3c2bae" layoutX="18.0" layoutY="252.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Send" wrappingWidth="113.109375">
+                     <font>
+                        <Font name="System Italic" size="24.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+         </center>
+         <top>
+            <AnchorPane prefHeight="53.0" prefWidth="342.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" prefHeight="68.0" prefWidth="396.0" text="Send Complete">
+                     <font>
+                        <Font name="Franklin Gothic Medium Italic" size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </top>
+         <bottom>
+            <AnchorPane prefHeight="129.0" prefWidth="396.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="backtoMainmenu" layoutX="10.0" layoutY="19.0" mnemonicParsing="false" prefHeight="91.0" prefWidth="378.0" text="OK" />
+               </children>
+            </AnchorPane>
+         </bottom>
+      </BorderPane>
+   </children>
+</AnchorPane>

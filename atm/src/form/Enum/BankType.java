@@ -14,6 +14,13 @@ public enum BankType {
         this.num = num;
     }
 
+    public static BankType parseBank(int a) {
+        for (BankType val : values()) {
+            if(val.num == a) return val;
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return this.str;

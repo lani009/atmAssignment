@@ -1,8 +1,13 @@
+// {type:usecase}
+// {direction:leftToRight}
+// {generate:true}
+
 [Staff]-(Run Server)
 (Run Server)>(User Authentication)
-(Run Server)>(Transaction)
 (Login)>(User Authentication)
-(Transaction)<(Login)
+(Transaction)>(Login)
+(User Authentication)>(Database Query)
+(Transaction)>(Database Query)
 [User]-(Transaction)
 (Deposit)^(Transaction)
 (Withdrawal)^(Transaction)
