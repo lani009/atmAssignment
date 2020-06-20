@@ -60,12 +60,13 @@ public class AccountListController implements Initializable{
     @FXML
     private Label balance6;
     
-    private TransactionDAO dao;
-    
+    private TransactionDAO dao = TransactionDAO.getInstance();
+    //dao.getInstance();
+  
    
     public void select1(ActionEvent event) throws Exception{
         dao.setSelectedAccount(AccountNumber1.getText());
-        Parent main = FXMLLoader.load(getClass().getResource("???.fxml")); // 1번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
+        Parent main = FXMLLoader.load(getClass().getResource("Mainmenu.fxml")); // 1번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
         Scene scene = new Scene(main);
         Stage primaryStage = (Stage)select1.getScene().getWindow();
         primaryStage.setScene(scene);
@@ -73,7 +74,7 @@ public class AccountListController implements Initializable{
 
     public void select2(ActionEvent event) throws Exception{
         dao.setSelectedAccount(AccountNumber2.getText());
-        Parent main = FXMLLoader.load(getClass().getResource("???.fxml")); // 2번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
+        Parent main = FXMLLoader.load(getClass().getResource("Mainmenu.fxml")); // 2번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
         Scene scene = new Scene(main);
         Stage primaryStage = (Stage)select2.getScene().getWindow();
         primaryStage.setScene(scene);
@@ -81,7 +82,7 @@ public class AccountListController implements Initializable{
 
     public void select3(ActionEvent event) throws Exception{
         dao.setSelectedAccount(AccountNumber3.getText());
-        Parent main = FXMLLoader.load(getClass().getResource("???.fxml")); // 3번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
+        Parent main = FXMLLoader.load(getClass().getResource("Mainmenu.fxml")); // 3번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
         Scene scene = new Scene(main);
         Stage primaryStage = (Stage)select3.getScene().getWindow();
         primaryStage.setScene(scene);
@@ -89,7 +90,7 @@ public class AccountListController implements Initializable{
 
     public void select4(ActionEvent event) throws Exception{
         dao.setSelectedAccount(AccountNumber4.getText());
-        Parent main = FXMLLoader.load(getClass().getResource("???.fxml")); // 4번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
+        Parent main = FXMLLoader.load(getClass().getResource("Mainmenu.fxml")); // 4번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
         Scene scene = new Scene(main);
         Stage primaryStage = (Stage)select4.getScene().getWindow();
         primaryStage.setScene(scene);
@@ -97,7 +98,7 @@ public class AccountListController implements Initializable{
 
     public void select5(ActionEvent event) throws Exception{
         dao.setSelectedAccount(AccountNumber5.getText());
-        Parent main = FXMLLoader.load(getClass().getResource("???.fxml")); // 5번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
+        Parent main = FXMLLoader.load(getClass().getResource("Mainmenu.fxml")); // 5번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
         Scene scene = new Scene(main);
         Stage primaryStage = (Stage)select5.getScene().getWindow();
         primaryStage.setScene(scene);
@@ -105,7 +106,7 @@ public class AccountListController implements Initializable{
 
     public void select6(ActionEvent event) throws Exception{
         dao.setSelectedAccount(AccountNumber6.getText());
-        Parent main = FXMLLoader.load(getClass().getResource("???.fxml")); // 1번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
+        Parent main = FXMLLoader.load(getClass().getResource("Mainmenu.fxml")); // 1번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
         Scene scene = new Scene(main);
         Stage primaryStage = (Stage)select6.getScene().getWindow();
         primaryStage.setScene(scene);
@@ -118,7 +119,6 @@ public class AccountListController implements Initializable{
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         try {
-            dao = TransactionDAO.getInstance();
             Account[] myAccounts = dao.getAccountList(); // 나의 계좌 목록
             int length= myAccounts.length;
                 if(length==1) {

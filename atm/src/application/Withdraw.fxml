@@ -8,16 +8,16 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="553.0" prefWidth="396.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="553.0" prefWidth="396.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.WithdrawController">
    <children>
       <BorderPane prefHeight="553.0" prefWidth="396.0">
          <center>
             <AnchorPane prefHeight="431.0" prefWidth="276.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextField layoutX="8.0" layoutY="78.0" prefHeight="35.0" prefWidth="245.0" promptText="How much?" />
-                  <Button layoutX="201.0" layoutY="249.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="54.0" text="OK" />
-                  <Label alignment="CENTER_RIGHT" layoutX="36.0" layoutY="257.0" prefHeight="36.0" prefWidth="157.0" text="Withdraw !" textAlignment="CENTER" />
-                  <PasswordField layoutX="8.0" layoutY="192.0" prefHeight="37.0" prefWidth="246.0" promptText="Password" />
+                  <TextField fx:id="Withdraw" layoutX="8.0" layoutY="78.0" prefHeight="35.0" prefWidth="245.0" promptText="How much?" />
+                  <Button fx:id="Ok" layoutX="201.0" layoutY="249.0" mnemonicParsing="false" onAction="#OkAction" prefHeight="51.0" prefWidth="54.0" text="OK" />
+                  <Label fx:id="status" alignment="CENTER_RIGHT" layoutX="36.0" layoutY="257.0" prefHeight="36.0" prefWidth="157.0" text="Withdraw !" textAlignment="CENTER" />
+                  <PasswordField fx:id="Pw" layoutX="8.0" layoutY="192.0" prefHeight="37.0" prefWidth="246.0" promptText="Password" />
                </children>
             </AnchorPane>
          </center>
@@ -35,7 +35,7 @@
          <bottom>
             <AnchorPane prefHeight="69.0" prefWidth="386.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="127.0" text="Go Back" />
+                  <Button fx:id="Back" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#BackAction" prefHeight="42.0" prefWidth="127.0" text="Go Back" />
                </children>
             </AnchorPane>
          </bottom>

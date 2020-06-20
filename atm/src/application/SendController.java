@@ -1,18 +1,15 @@
 package application;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.net.URL;
+import java.rmi.server.ServerNotActiveException;
 import java.util.ResourceBundle;
 
 import javax.security.auth.login.AccountNotFoundException;
-import javax.security.auth.login.LoginException;
 
 import form.Account;
-import form.Transaction;
 import form.TransactionDAO;
 import form.Enum.BankType;
-import form.Enum.TransactionType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,7 +43,7 @@ public class SendController implements Initializable {
 	@FXML
 	Label Bank;
 	int num=0;
-	TransactionDAO dao;
+	TransactionDAO dao= TransactionDAO.getInstance();;
 	public void MDCBankAction(ActionEvent e) {
 		num=1;
 	}
@@ -62,28 +59,24 @@ public class SendController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		MDCBank.setOnAction(e -> {
-			MDCBank.setOnAction(event->MDCBankActionAction(event));
+			MDCBank.setOnAction(event->MDCBankAction(event));
             Bank.setText("MDCBank");
         });
 		KAKAOBank.setOnAction(e -> {
-			KAKAOBank.setOnAction(event->KAKAOBankActionAction(event));
+			KAKAOBank.setOnAction(event->KAKAOBankAction(event));
             Bank.setText("KAKAOBank");
         });
 		NHBank.setOnAction(e -> {
-			MDCBank.setOnAction(event->NHBankActionAction(event));
+			MDCBank.setOnAction(event->NHBankAction(event));
             Bank.setText("NHBank");
         });
 		AJOUBank.setOnAction(e -> {
-			MDCBank.setOnAction(event->AJOUBankActionAction(event));
+			MDCBank.setOnAction(event->AJOUBankAction(event));
             Bank.setText("AJOUBank");
         });
-		send.setOnAction(e -> {
-			
-        	dao.getInstance();
-        
-            Account transactionAccount=dao.getAccount("");
-			
+		send.setOnAction(e -> {   
             try {
+				Account transactionAccount=dao.getAccount("");
             	if(num==1) {
             		Account opponentAccount = dao.searchAccount(Account.getText(), BankType.MDCBank);
             	}
@@ -106,7 +99,9 @@ public class SendController implements Initializable {
             	message.setText("Cannot find the account");
                 // 상대방의 계좌를 못 찾았을 경우임.
             	// 추가로 잔고보다 송금하려는 금액이 많을 때 예외 처리
-            } 
+            } catch (ServerNotActiveException e1) {
+				e1.printStackTrace();
+			} 
             Parent login;
             try {
                 login = FXMLLoader.load(getClass().getResource("Sendsuccess.fxml"));

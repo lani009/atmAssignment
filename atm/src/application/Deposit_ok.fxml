@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="412.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="412.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.DepositOkController">
    <children>
       <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="553.0" prefWidth="396.0">
          <center>
@@ -39,24 +39,24 @@
                               <Font name="Comic Sans MS Italic" size="36.0" />
                            </font>
                         </Text>
-                        <Label alignment="CENTER" prefHeight="56.0" prefWidth="365.0" text="계좌 번호" GridPane.rowIndex="4">
+                        <Label fx:id="AccountNumber" alignment="CENTER" prefHeight="56.0" prefWidth="365.0" text="계좌 번호" GridPane.rowIndex="4">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER" prefHeight="55.0" prefWidth="367.0" text="은행 이름" GridPane.rowIndex="2">
+                        <Label fx:id="BankName" alignment="CENTER" prefHeight="55.0" prefWidth="367.0" text="은행 이름" GridPane.rowIndex="2">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
                      </children>
                   </GridPane>
-                  <Label alignment="CENTER" layoutX="143.0" layoutY="228.0" prefHeight="36.0" prefWidth="246.0" text="예금액">
+                  <Label fx:id="Depositamount" alignment="CENTER" layoutX="143.0" layoutY="228.0" prefHeight="36.0" prefWidth="246.0" text="예금액">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER" layoutX="143.0" layoutY="291.0" prefHeight="33.0" prefWidth="239.0" text="잔액">
+                  <Label fx:id="Balance" alignment="CENTER" layoutX="143.0" layoutY="291.0" prefHeight="33.0" prefWidth="239.0" text="잔액">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -89,7 +89,7 @@
          <bottom>
             <AnchorPane prefHeight="129.0" prefWidth="396.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button layoutX="10.0" layoutY="19.0" mnemonicParsing="false" prefHeight="91.0" prefWidth="378.0" text="OK" />
+                  <Button fx:id="Ok" layoutX="10.0" layoutY="19.0" mnemonicParsing="false" onAction="#OkAction" prefHeight="91.0" prefWidth="378.0" text="OK" />
                </children>
             </AnchorPane>
          </bottom>

@@ -18,17 +18,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import java.math.BigInteger;
-import java.rmi.server.ServerNotActiveException;
-
-import javax.security.auth.login.AccountNotFoundException;
-import javax.security.auth.login.LoginException;
 
 import form.Account;
-import form.Transaction;
 import form.TransactionDAO;
 import form.Enum.BankType;
-import form.Enum.TransactionType;
 public class DepositController implements Initializable{
     @FXML
     private TextField Deposit;
@@ -41,7 +34,7 @@ public class DepositController implements Initializable{
     @FXML
     private Label status;
     
-    private TransactionDAO dao;
+    private TransactionDAO dao =TransactionDAO.getInstance();
     
     /**
      * 예금 값 입력 후 OK입력 시 예금 결과화면 출력 이벤트 이다.
@@ -51,18 +44,17 @@ public class DepositController implements Initializable{
      * @throws Exception
      */
     public void OkAction(ActionEvent event) throws Exception{
-        String amount = Deposit.getText();
+        String amount=Deposit.getText();
         String pw = Pw.getText();
-        dao = TransactionDAO.getInstance();
         Account 가짜atm = dao.searchAccount("ATM", BankType.MDCBank);
-        Account transactionAccount = dao.searchAccount(dao.getSelectedAccount(), dao.getSelectedBankType());  //** 계좌선택에서 받아온 계좌번호 가져오는 메소드 필요!!
-        if(dao.checkPassword(pw)) {
+        Account transactionAccount = dao.getAccount(dao.getSelectedAccount());//** 계좌선택에서 받아온 계좌번호 가져오기
+        if(dao.checkPassword(pw)) {// 입력한 비밀번호와 해당 Id에 대응되는 비밀번호를 비교
             Transaction 예금 = new Transaction(TransactionType.DEPOSIT, transactionAccount, 가짜atm,
                 BigInteger.valueOf(Integer.parseInt(amount)));
 
-            dao.sendTransaction(예금);  // 거래를 처리
+            dao.sendTransaction(예금); // 거래를 처리
         }
-        Parent dere = FXMLLoader.load(getClass().getResource("???.fxml")); // 예금결과화면 연결
+        Parent dere = FXMLLoader.load(getClass().getResource("Deposit_ok.fxml")); // 예금결과화면 연결
         Scene scene = new Scene(dere);
         Stage primaryStage = (Stage)Ok.getScene().getWindow();
         primaryStage.setScene(scene);
@@ -74,7 +66,7 @@ public class DepositController implements Initializable{
      * @throws Exception
      */
     public void BackAction(ActionEvent event) throws Exception{
-        Parent main = FXMLLoader.load(getClass().getResource("???.fxml")); // 메인화면 연결
+        Parent main = FXMLLoader.load(getClass().getResource("Mainmenu.fxml")); // 메인화면 연결
         Scene scene = new Scene(main);
         Stage primaryStage = (Stage)Ok.getScene().getWindow();
         primaryStage.setScene(scene);

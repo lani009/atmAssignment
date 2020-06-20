@@ -17,7 +17,7 @@ public class ServerController {
             InetSocketAddress port = new InetSocketAddress(9999);
             server.bind(port);
 
-            System.out.printf("Server Init. %d port bind.\n", port.toString());
+            System.out.printf("Server Init. %s port bind.\n", port.toString());
 
             // Thread Pool 생성, 스레드 개수 10개
             ExecutorService receiver = Executors.newFixedThreadPool(10);

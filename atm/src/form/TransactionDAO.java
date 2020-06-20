@@ -36,6 +36,8 @@ public class TransactionDAO {
 
     private BankType selectedBankType = null;
 
+    private Transaction previousTransaction = null;
+
     private TransactionDAO() {
     }
 
@@ -125,6 +127,14 @@ public class TransactionDAO {
 
     public BankType getSelectedBankType() {
         return this.selectedBankType;
+    }
+
+    private void setPreviousTransaction(Transaction transaction) {
+        this.previousTransaction = transaction;
+    }
+
+    public Transaction getPreviousTransaction() {
+        return this.previousTransaction;
     }
 
     public boolean checkPassword(String pw) {
@@ -232,6 +242,7 @@ public class TransactionDAO {
      */
     public void sendTransaction(Transaction transaction) {
         try {
+            setPreviousTransaction(transaction);
             socket.send("transaction"); // transaction 요청
             byte[] serialized;
             try (ByteArrayOutputStream baos = new ByteArrayOutputStream();

@@ -16,7 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
@@ -28,8 +27,6 @@ public class LoginController implements Initializable{
     @FXML
     private ToggleGroup group;
     @FXML
-    private TextField Bank;
-    @FXML
     private TextField Id;
     @FXML
     private PasswordField Pw;
@@ -37,8 +34,6 @@ public class LoginController implements Initializable{
     private Button sgin;
     @FXML
     private Label status;
-    @FXML
-    private ScrollBar BankScrollBar;
     @FXML
     private RadioButton MDCBank;
     @FXML
@@ -48,7 +43,6 @@ public class LoginController implements Initializable{
     @FXML
     private RadioButton AJOUBank;
     private int Type = 1;
-    private TransactionDAO dao;
     
     /**
      * 로그인 을 위한 이벤트이다.
@@ -71,9 +65,9 @@ public class LoginController implements Initializable{
         }else if(Type ==4){
             BANK="AJOUBank";
         }
-        dao = TransactionDAO.login(ID, PW, BankType.valueOf(BANK));
+        TransactionDAO.login(ID, PW, BankType.valueOf(BANK));
         status.setText("Login Success");
-        Parent login = FXMLLoader.load(getClass().getResource("???.fxml")); // 메인화면 연결
+        Parent login = FXMLLoader.load(getClass().getResource("Mainmenu.fxml")); // 메인화면 연결
         Scene scene = new Scene(login);
         Stage primaryStage = (Stage)sgin.getScene().getWindow();
         primaryStage.setScene(scene);
