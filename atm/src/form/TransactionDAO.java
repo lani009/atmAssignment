@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.math.BigInteger;
 import java.rmi.server.ServerNotActiveException;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -28,6 +29,13 @@ public class TransactionDAO {
      */
     private static ClientSocket socket = null;
 
+    /**
+     * 계좌 선택
+     */
+    private String selectedAccount = null;
+
+    private BankType selectedBankType = null;
+
     private TransactionDAO() {
     }
 
@@ -49,6 +57,7 @@ public class TransactionDAO {
         ClientSocket loginSocket = new ClientSocket();
         if (loginSocket.login(id, pw, bankType)) {
             socket = loginSocket;
+            instance.setSelectedBankType(bankType);
             return instance;
         } else {
             try {
@@ -87,7 +96,7 @@ public class TransactionDAO {
         socket = null;
     }
 
-    public Object getObject(String objString) {
+    private Object getObject(String objString) {
         byte[] serializedMember = Base64.getDecoder().decode(objString);   // Base64 -> 바이트 배열로 변환
         try (ByteArrayInputStream bais = new ByteArrayInputStream(serializedMember);
                 ObjectInputStream ois = new ObjectInputStream(bais)) {
@@ -100,6 +109,33 @@ public class TransactionDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void setSelectedAccount(String account) {
+        this.selectedAccount = account;
+    }
+
+    public String getSelectedAccount() {
+        return this.selectedAccount;
+    }
+
+    public void setSelectedBankType(BankType bType) {
+        this.selectedBankType = bType;
+    }
+
+    public BankType getSelectedBankType() {
+        return this.selectedBankType;
+    }
+
+    public boolean checkPassword(String pw) {
+        try {
+            socket.send("check password");
+            socket.send(pw);
+            return socket.recv().equals("true");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**
@@ -222,6 +258,9 @@ public class TransactionDAO {
      */
     public Account searchAccount(String accountNumber, BankType banktype)
             throws AccountNotFoundException, ServerNotActiveException {
+        if(accountNumber.equals("ATM")) {
+            return new Account("ATM", banktype, BigInteger.ZERO);
+        }
         try {
             socket.send("search account");
             socket.send(accountNumber);

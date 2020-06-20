@@ -33,7 +33,7 @@ import server.Enum.RequsetType;
 public class DatabaseDAO implements Runnable, Closeable {
     private ClientConnectionSocket client;
     private String id, pw, address;
-    private volatile Connection[] conn = new Connection[BankType.values().length]; // 은행의 개수만큼 Connection공간 할당
+    private Connection[] conn = new Connection[BankType.values().length]; // 은행의 개수만큼 Connection공간 할당
 
     /**
      * client socket 받아와서 필드 변수 초기화. DBProperties.json을 파싱하여 데이터베이스의 주소와 id, pw를
@@ -85,6 +85,10 @@ public class DatabaseDAO implements Runnable, Closeable {
                     searchAccount();
                     break;
 
+                case CHECKPASSWORD:
+                    checkPassword();
+                    break;
+
                 case DISCONNECT:
                     try {
                         close();
@@ -104,12 +108,12 @@ public class DatabaseDAO implements Runnable, Closeable {
      * @return database_dbms_address
      */
     private String getSqlAddress(BankType bankType) {
-        return String.format("jdbc:mariadb://%s:3306/%s?" + "useUnicode=true&characterEncoding=utf8", address,
+        return String.format("jdbc:mariadb://%s:3306/%s?useUnicode=true&characterEncoding=utf8", address,
                 bankType.toString());
     }
 
     /**
-     * 은행별로 알맞은 Connection을 반환한다.
+     * 은행별로 알맞은 Database Connection을 반환한다.
      * 
      * @throws SQLException
      */
@@ -120,6 +124,33 @@ public class DatabaseDAO implements Runnable, Closeable {
             return conn[bankType.toInt() - 1];
         } else {
             return conn[bankType.toInt() - 1];
+        }
+    }
+
+    /**
+     * 계좌이체, 입금, 출금시 비밀번호가 맞는지 틀린지 검증
+     */
+    private void checkPassword() {
+        try {
+            Connection conn = getConnection(client.getUserBankType());
+            try (PreparedStatement pstmt = conn.prepareStatement(
+                        "SELECT * FROM accounts WHERE id=? AND password=PASSWORD(?)")) {
+                pstmt.setString(1, client.getUserId());
+                pstmt.setString(2, client.recv());
+                ResultSet rs = pstmt.executeQuery();
+                rs.last();
+
+                if(rs.getRow() == 0) {
+                    client.send("false");
+                } else {
+                    client.send("true");
+                }
+                rs.close();
+            } catch (SQLException | IOException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -139,6 +170,9 @@ public class DatabaseDAO implements Runnable, Closeable {
             if (rs.getRow() == 0) {
                 // 일치하는 계좌가 없을 경우
                 client.send("not found");
+                rs.close();
+                pstmt.close();
+                return;
             }
             rs.first();
             Account accountObject = new Account(account, bankType, BigInteger.ZERO);
@@ -176,7 +210,10 @@ public class DatabaseDAO implements Runnable, Closeable {
             ArrayList<Transaction> list = new ArrayList<>(); // 거래 정보를 담을 리스트 선언
             rs.last();
             if (rs.getRow() == 0) {
+                // transaction list가 없을 경우
                 client.send("no such data");
+                pstmt.close();
+                rs.close();
                 return;
             }
             rs.beforeFirst();
@@ -270,7 +307,7 @@ public class DatabaseDAO implements Runnable, Closeable {
     }
 
     /**
-     * Transaction을 처리하기 위한 메소드
+     * 클라이언트가 요청한 Transaction을 처리하기 위한 메소드
      */
     private synchronized void processTransaction() {
         try {
