@@ -1,5 +1,6 @@
 package application;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -16,7 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-public class AccountListController implements Initializable{
+public class AccountListController implements Initializable {
 
     @FXML
     private Button select1;
@@ -24,91 +25,78 @@ public class AccountListController implements Initializable{
     private Label AccountNumber1;
     @FXML
     private Label balance1;
-    
+
     @FXML
     private Button select2;
     @FXML
     private Label AccountNumber2;
     @FXML
     private Label balance2;
-    
+
     @FXML
     private Button select3;
     @FXML
     private Label AccountNumber3;
     @FXML
     private Label balance3;
-    
+
     @FXML
     private Button select4;
     @FXML
     private Label AccountNumber4;
     @FXML
     private Label balance4;
-    
+
     @FXML
     private Button select5;
     @FXML
     private Label AccountNumber5;
     @FXML
     private Label balance5;
-    
+
     @FXML
     private Button select6;
     @FXML
     private Label AccountNumber6;
     @FXML
     private Label balance6;
-    
+
     private TransactionDAO dao = TransactionDAO.getInstance();
-    //dao.getInstance();
-  
-   
-    public void select1(ActionEvent event) throws Exception{
-        dao.setSelectedAccount(AccountNumber1.getText());
-        Parent main = FXMLLoader.load(getClass().getResource("Mainmenu.fxml")); // 1번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
+
+    public void select1(ActionEvent event) throws Exception {
+        goToMainMenu(select1.getText());
+    }
+
+    public void select2(ActionEvent event) throws Exception {
+        goToMainMenu(select2.getText());
+    }
+
+    public void select3(ActionEvent event) throws Exception {
+        goToMainMenu(select3.getText());
+    }
+
+    public void select4(ActionEvent event) throws Exception {
+        goToMainMenu(select4.getText());
+    }
+
+    public void select5(ActionEvent event) throws Exception {
+        goToMainMenu(select5.getText());
+    }
+
+    public void select6(ActionEvent event) throws Exception {
+        goToMainMenu(select6.getText());
+    }
+
+    /**
+     * 메인 메뉴로 화면전환
+     * 
+     * @throws IOException
+     */
+    public void goToMainMenu(String selectedAccount) throws IOException {
+        dao.setSelectedAccount(selectedAccount);
+        Parent main = FXMLLoader.load(getClass().getResource("fxml/Mainmenu.fxml")); // 1번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
         Scene scene = new Scene(main);
         Stage primaryStage = (Stage)select1.getScene().getWindow();
-        primaryStage.setScene(scene);
-    }
-
-    public void select2(ActionEvent event) throws Exception{
-        dao.setSelectedAccount(AccountNumber2.getText());
-        Parent main = FXMLLoader.load(getClass().getResource("Mainmenu.fxml")); // 2번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
-        Scene scene = new Scene(main);
-        Stage primaryStage = (Stage)select2.getScene().getWindow();
-        primaryStage.setScene(scene);
-    }
-
-    public void select3(ActionEvent event) throws Exception{
-        dao.setSelectedAccount(AccountNumber3.getText());
-        Parent main = FXMLLoader.load(getClass().getResource("Mainmenu.fxml")); // 3번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
-        Scene scene = new Scene(main);
-        Stage primaryStage = (Stage)select3.getScene().getWindow();
-        primaryStage.setScene(scene);
-    }
-
-    public void select4(ActionEvent event) throws Exception{
-        dao.setSelectedAccount(AccountNumber4.getText());
-        Parent main = FXMLLoader.load(getClass().getResource("Mainmenu.fxml")); // 4번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
-        Scene scene = new Scene(main);
-        Stage primaryStage = (Stage)select4.getScene().getWindow();
-        primaryStage.setScene(scene);
-    }
-
-    public void select5(ActionEvent event) throws Exception{
-        dao.setSelectedAccount(AccountNumber5.getText());
-        Parent main = FXMLLoader.load(getClass().getResource("Mainmenu.fxml")); // 5번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
-        Scene scene = new Scene(main);
-        Stage primaryStage = (Stage)select5.getScene().getWindow();
-        primaryStage.setScene(scene);
-    }
-
-    public void select6(ActionEvent event) throws Exception{
-        dao.setSelectedAccount(AccountNumber6.getText());
-        Parent main = FXMLLoader.load(getClass().getResource("Mainmenu.fxml")); // 1번 계좌에 대한 메인화면으로 이동(메인화면 fxml이랑 연결하면됨)
-        Scene scene = new Scene(main);
-        Stage primaryStage = (Stage)select6.getScene().getWindow();
         primaryStage.setScene(scene);
     }
     

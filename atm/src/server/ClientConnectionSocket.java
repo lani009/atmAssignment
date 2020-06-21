@@ -31,7 +31,7 @@ public class ClientConnectionSocket implements Closeable {
     /**
      * Client와 통신할 수 있게 한다. 로그인 실패시 LoginException 발생
      * @param client
-     * @throws LoginException
+     * @throws LoginException 로그인 실패
      */
     public ClientConnectionSocket(Socket client) throws LoginException {
         try {
@@ -42,10 +42,9 @@ public class ClientConnectionSocket implements Closeable {
             recv = client.getInputStream();
             recvReader = new BufferedReader(new InputStreamReader(recv));
             sendWriter = new BufferedWriter(new OutputStreamWriter(send));
-            sendWriter.write("server hello");
-            sendWriter.flush();
 
             if(!login()) {
+                send("login failed");
                 throw new LoginException("User Failed login");
             } else {
                 send("login success");
@@ -65,6 +64,7 @@ public class ClientConnectionSocket implements Closeable {
     public void send(String msg) {
         try {
             sendWriter.write(msg);
+            sendWriter.newLine();
             sendWriter.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -96,7 +96,7 @@ public class ClientConnectionSocket implements Closeable {
 
     /**
      * 해당 유저의 ID 반환
-     * @return
+     * @return id
      */
     public String getUserId() {
         return this.userId;

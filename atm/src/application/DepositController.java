@@ -54,7 +54,7 @@ public class DepositController implements Initializable{
 
             dao.sendTransaction(예금); // 거래를 처리
         }
-        Parent dere = FXMLLoader.load(getClass().getResource("Deposit_ok.fxml")); // 예금결과화면 연결
+        Parent dere = FXMLLoader.load(getClass().getResource("fxml/Deposit_ok.fxml")); // 예금결과화면 연결
         Scene scene = new Scene(dere);
         Stage primaryStage = (Stage)Ok.getScene().getWindow();
         primaryStage.setScene(scene);
@@ -66,7 +66,7 @@ public class DepositController implements Initializable{
      * @throws Exception
      */
     public void BackAction(ActionEvent event) throws Exception{
-        Parent main = FXMLLoader.load(getClass().getResource("Mainmenu.fxml")); // 메인화면 연결
+        Parent main = FXMLLoader.load(getClass().getResource("fxml/Mainmenu.fxml")); // 메인화면 연결
         Scene scene = new Scene(main);
         Stage primaryStage = (Stage)Ok.getScene().getWindow();
         primaryStage.setScene(scene);

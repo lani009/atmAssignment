@@ -27,7 +27,7 @@ public class TransactionDAO {
     /**
      * 서버와의 통신을 담당하는 클래스
      */
-    private static ClientSocket socket = null;
+    private ClientSocket socket = null;
 
     /**
      * 계좌 선택
@@ -37,6 +37,8 @@ public class TransactionDAO {
     private BankType selectedBankType = null;
 
     private Transaction previousTransaction = null;
+
+    private String userId;
 
     private TransactionDAO() {
     }
@@ -58,12 +60,14 @@ public class TransactionDAO {
         // 로그인 성공시 객체 리턴
         ClientSocket loginSocket = new ClientSocket();
         if (loginSocket.login(id, pw, bankType)) {
-            socket = loginSocket;
+            instance = new TransactionDAO();
+            instance.socket = loginSocket;
             instance.setSelectedBankType(bankType);
+            instance.userId = id;
             return instance;
         } else {
             try {
-                socket.close();
+                loginSocket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -94,8 +98,8 @@ public class TransactionDAO {
             throw new IllegalStateException("You Must be loggedin before calling logout() method.");
         }
         instance = null;
-        socket.close();
-        socket = null;
+        instance.socket.close();
+        instance.socket = null;
     }
 
     private Object getObject(String objString) {
@@ -113,30 +117,65 @@ public class TransactionDAO {
         return null;
     }
 
+    /**
+     * 계좌선택 화면에서 고객이 선택한 계좌를 set할 때 사용.
+     * @param account
+     */
     public void setSelectedAccount(String account) {
         this.selectedAccount = account;
     }
 
+    /**
+     * 계좌선택 화면에서 고객이 선택한 계좌를 받아온다.
+     * @return selectedAccount 선택된 계좌
+     */
     public String getSelectedAccount() {
         return this.selectedAccount;
     }
 
+    /**
+     * 로그인 창에서 고객이 선택한 은행을 set할 때 사용.
+     */
     public void setSelectedBankType(BankType bType) {
         this.selectedBankType = bType;
     }
 
+    /**
+     * 로그인 창에서 고객이 선택한 은행을 받아온다.
+     * @return 은행타입
+     */
     public BankType getSelectedBankType() {
         return this.selectedBankType;
     }
 
+    /**
+     * 고객이 마지막으로 전송한 거래를 저장.
+     */
     private void setPreviousTransaction(Transaction transaction) {
         this.previousTransaction = transaction;
     }
 
+    /**
+     * 고객이 마지막으로 전송한 거래를 받아온다.
+     * @return
+     */
     public Transaction getPreviousTransaction() {
         return this.previousTransaction;
     }
 
+    /**
+     * 고객의 ID를 받아온다.
+     * @return userID
+     */
+    public String getUserId() {
+        return this.userId;
+    }
+
+    /**
+     * 거래를 진행하면서, 고객의 비밀번호가 맞는지 틀린지를 bool타입으로 리턴
+     * @param pw
+     * @return 비밀번호 일치 여부
+     */
     public boolean checkPassword(String pw) {
         try {
             socket.send("check password");
@@ -149,8 +188,7 @@ public class TransactionDAO {
     }
 
     /**
-     * 데이터베이스로 부터 나의 거래 내역을 리턴. 만약 거래 내역이 없다면, null을 리턴한다. &#10;<strong>서버랑 직접적으로 통신하는 메소드이므로, 너무 많이 호출하지
-     * 말것!<strong/>
+     * 데이터베이스로 부터 나의 거래 내역을 리턴. 만약 거래 내역이 없다면, null을 리턴한다. &#10;<strong>서버랑 직접적으로 통신하는 메소드이므로, 너무 많이 호출하지 말것!</strong>
      * 
      * @return 거래_내역
      * @throws ServerNotActiveException
@@ -178,8 +216,7 @@ public class TransactionDAO {
     }
 
     /**
-     * 데이터베이스로 부터 나의 계좌 목록을 받음. &#10;<strong>서버랑 직접적으로 통신하는 메소드이므로, 너무 많이 호출하지
-     * 말것!<strong/>
+     * 데이터베이스로 부터 나의 계좌 목록을 받음. &#10;<strong>서버랑 직접적으로 통신하는 메소드이므로, 너무 많이 호출하지 말것!</strong>
      * 
      * @return 계좌_목록
      * @throws ServerNotActiveException
@@ -191,7 +228,8 @@ public class TransactionDAO {
             String serialized;  // 직렬화된 String이 저장될 변수
 
             ArrayList<Account> accountArrayList = new ArrayList<>();
-            while((serialized = socket.recv()) != "-1") {
+            while(!(serialized = socket.recv()).equals("-1")) {
+                System.out.println(serialized);
 
                 Object objectMember = getObject(serialized);
                 accountArrayList.add((Account) objectMember);   // Array List에 저장
@@ -258,14 +296,13 @@ public class TransactionDAO {
 
     /**
      * 계좌 정보를 찾아서 Account 객체를 리턴한다. 계좌 정보를 찾지 못할 경우 AccountNotFoundException 예외를
-     * 발생시킨다. &#10;<strong>서버랑 직접적으로 통신하는 메소드이므로, 너무 많이 호출하지 말것!<strong/>
+     * 발생시킨다. <strong>서버랑 직접적으로 통신하는 메소드이므로, 너무 많이 호출하지 말것!<strong/>
      * 
      * @param accountNumber 계좌번호
      * @param banktype      은행종류
      * @return Account 계좌
      * @throws AccountNotFoundException
      * @throws ServerNotActiveException
-     * @throws IOException
      */
     public Account searchAccount(String accountNumber, BankType banktype)
             throws AccountNotFoundException, ServerNotActiveException {

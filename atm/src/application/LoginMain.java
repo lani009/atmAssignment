@@ -11,7 +11,7 @@ public class LoginMain extends Application{
     public void start(Stage primaryStage) throws Exception{
         try {
         primaryStage.setTitle("Well Come!!");
-        Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("fxml/login.fxml"));
         Scene scene =new Scene(root);
         primaryStage.setScene(scene);  // Stage에 root.fxml를 load한 scene를 가지고 있음
         primaryStage.show();

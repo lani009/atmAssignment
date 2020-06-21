@@ -43,7 +43,7 @@ public class DatabaseDAO implements Runnable, Closeable {
         JSONParser parser = new JSONParser();
 
         // 데이터베이스에 대한 정보를 파싱해 온다.
-        try (FileReader reader = new FileReader("./atm/src/server/DBProperties.json")) {
+        try (FileReader reader = new FileReader("./DBProperties.json")) {
             JSONObject jsonObject = (JSONObject) parser.parse(reader);
             this.id = (String) jsonObject.get("id");
             this.pw = (String) jsonObject.get("pw");
@@ -70,22 +70,27 @@ public class DatabaseDAO implements Runnable, Closeable {
             RequsetType requsetType = client.getPhase();
             switch (requsetType) {
                 case TRANSACTION:
+                    System.out.println("Transaction requst");
                     processTransaction();
                     break;
 
                 case GETMYACCOUNTLIST:
+                    System.out.println("Get my Account List requst");
                     sendAccountList();
                     break;
 
                 case GETMYTRANSACTIONLIST:
+                    System.out.println("Get my Transaction List requst");
                     getMyTransactionList();
                     break;
 
                 case SEARCHACCOUNT:
+                    System.out.println("Search Account requst");
                     searchAccount();
                     break;
 
                 case CHECKPASSWORD:
+                    System.out.println("Check Password requst");
                     checkPassword();
                     break;
 
@@ -275,7 +280,7 @@ public class DatabaseDAO implements Runnable, Closeable {
             Connection conn = getConnection(client.getUserBankType());
             // 데이터베이스로 부터 고객의 계좌 정보만을 가져오기 위한 sql문
             PreparedStatement pstmt = conn
-                    .prepareStatement("SELECT accountNumber, balance FROM accounts WHERE id = '?'");
+                    .prepareStatement("SELECT accountNumber, balance FROM accounts WHERE id=?");
             pstmt.setString(1, client.getUserId());
             ResultSet rs = pstmt.executeQuery();
 
@@ -287,6 +292,7 @@ public class DatabaseDAO implements Runnable, Closeable {
                 // 계좌 객체를 생성한다.
                 Account account = new Account(accountNumber, client.getUserBankType(),
                         BigInteger.valueOf(Long.parseLong(balance)));
+                System.out.println(account);
 
                 try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         ObjectOutputStream oos = new ObjectOutputStream(baos)) {
@@ -294,6 +300,7 @@ public class DatabaseDAO implements Runnable, Closeable {
                     // serialized -> 직렬화된 account 객체
                     byte[] serialized = baos.toByteArray();
                     client.send(Base64.getEncoder().encodeToString(serialized)); // 바이트 배열로 생성된 직렬화 데이터를 base64로 변환
+                    System.out.println(Base64.getEncoder().encodeToString(serialized));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -330,7 +337,7 @@ public class DatabaseDAO implements Runnable, Closeable {
 
                         // 고객의 계좌 잔고를 업데이트 하는 Statement를 준비
                         pstmtTo = toConnection.prepareStatement(
-                                "UPDATE accounts SET balance = balance + ? WHERE accountNumber = '?'");
+                                "UPDATE accounts SET balance = balance + ? WHERE accountNumber = ?");
                         pstmtTo.setBigDecimal(1, new BigDecimal(amount));
                         pstmtTo.setString(2, transaction.getTo().getAccountNumber());
 

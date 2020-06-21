@@ -32,15 +32,16 @@ public class SendsuccessController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		dao = TransactionDAO.getInstance();
-		Account transaction = dao.getAccount("");
-		name.setText();
-		Account.setText("account.accountnumber()");
-		money.setText("Account.money()");
-		balance.setText("account.balance()");
+		Account transaction = dao.getAccount(""); //TODO 계좌 정보를 불러오는 메소드 필요
+		name.setText(dao.getUserId());//TODO 괄호 안에 id를 불러오는 메소드 필요 
+		Account.setText(dao.getSelectedAccount());//TODO 괄호 안에 계좌번호를 불러오는 메소드 필요 
+		SendController c = new SendController();
+		money.setText(c.Money());//TODO 괄호 안에 송금액를 불러오는 메소드 필요 (sendController에서 불러와야 되는데 이렇게 해도 되는지 모르겠다)
+		balance.setText("");//TODO 괄호 안에 id를 불러오는 메소드 필요 
 		backtoMainmenu.setOnAction(e -> {
 			Parent login;
 			try {
-				login = FXMLLoader.load(getClass().getResource("Mainmenu.fxml"));
+				login = FXMLLoader.load(getClass().getResource("fxml/Mainmenu.fxml"));
 				Scene scene = new Scene(login);
 
 				Stage primaryStage = (Stage) backtoMainmenu.getScene().getWindow(); // 현재 윈도우 가져오기

@@ -55,6 +55,7 @@ public class ClientSocket implements Closeable {
             client.setKeepAlive(true);
             client.connect(address);    // 연결 수행
 
+            System.out.println("dfd");
             // IO 스트림 초기화
             send = client.getOutputStream();
             recv = client.getInputStream();
@@ -106,7 +107,6 @@ public class ClientSocket implements Closeable {
      */
     public boolean login(String id, String pw, BankType bankType) {
         try {
-            send("login");
             send(id);
             send(pw);
             send(bankType.name());

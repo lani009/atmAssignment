@@ -53,4 +53,9 @@ public class Account implements Serializable {
     public BigInteger getBalance() {
         return this.balance;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s %s", getAccountNumber(), getBankType(), getBalance());
+    }
 }

@@ -31,7 +31,6 @@ public class ServerController {
                     // Thread 실행
                     receiver.execute(new DatabaseDAO(new ClientConnectionSocket(client)));
                 } catch (LoginException e) {
-                    client.getOutputStream().write(0);  // 로그인 실패 메시지
                     client.close(); // 로그인 실패시 소켓 연결 close
                 }
             }
