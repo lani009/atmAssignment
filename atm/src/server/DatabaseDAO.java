@@ -29,6 +29,8 @@ import server.Enum.RequsetType;
 
 /**
  * 데이터베이스와 직접적으로 통신하여 클라이언트의 요청을 수행한다.
+ * 
+ * @author 정의철
  */
 public class DatabaseDAO implements Runnable, Closeable {
     private ClientConnectionSocket client;

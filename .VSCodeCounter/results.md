@@ -1,20 +1,20 @@
 # Summary
 
-Date : 2020-06-18 03:18:57
+Date : 2020-06-22 03:50:15
 
 Directory d:\git\atmAssignment
 
-Total : 33 files,  2860 codes, 262 comments, 551 blanks, all 3673 lines
+Total : 55 files,  4917 codes, 475 comments, 749 blanks, all 6141 lines
 
 [details](details.md)
 
 ## Languages
 | language | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
+| Java | 28 | 2,008 | 446 | 362 | 2,816 |
 | Markdown | 9 | 1,860 | 0 | 347 | 2,207 |
-| Java | 17 | 958 | 261 | 196 | 1,415 |
-| XML | 2 | 20 | 0 | 7 | 27 |
-| yUML | 1 | 10 | 0 | 0 | 10 |
+| XML | 13 | 1,026 | 25 | 38 | 1,089 |
+| yUML | 1 | 11 | 3 | 1 | 15 |
 | JSON | 2 | 9 | 0 | 0 | 9 |
 | Properties | 1 | 3 | 0 | 1 | 4 |
 | CSS | 1 | 0 | 1 | 0 | 1 |
@@ -22,14 +22,15 @@ Total : 33 files,  2860 codes, 262 comments, 551 blanks, all 3673 lines
 ## Directories
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| . | 33 | 2,860 | 262 | 551 | 3,673 |
-| atm | 22 | 987 | 262 | 203 | 1,452 |
-| atm\src | 22 | 987 | 262 | 203 | 1,452 |
-| atm\src\application | 8 | 146 | 20 | 48 | 214 |
-| atm\src\form | 7 | 318 | 131 | 62 | 511 |
-| atm\src\form\Enum | 2 | 26 | 0 | 6 | 32 |
-| atm\src\server | 7 | 523 | 111 | 93 | 727 |
-| atm\src\server\Enum | 1 | 8 | 0 | 1 | 9 |
+| . | 55 | 4,917 | 475 | 749 | 6,141 |
+| atm | 43 | 2,911 | 447 | 399 | 3,757 |
+| atm\src | 43 | 2,911 | 447 | 399 | 3,757 |
+| atm\src\application | 29 | 1,957 | 166 | 223 | 2,346 |
+| atm\src\application\fxml | 12 | 894 | 0 | 37 | 931 |
+| atm\src\form | 7 | 380 | 164 | 76 | 620 |
+| atm\src\form\Enum | 2 | 32 | 0 | 7 | 39 |
+| atm\src\server | 7 | 574 | 117 | 100 | 791 |
+| atm\src\server\Enum | 1 | 9 | 0 | 1 | 10 |
 | dependency | 10 | 1,863 | 0 | 348 | 2,211 |
 | dependency\javafx-sdk-11.0.2 | 10 | 1,863 | 0 | 348 | 2,211 |
 | dependency\javafx-sdk-11.0.2\legal | 9 | 1,860 | 0 | 347 | 2,207 |

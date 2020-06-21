@@ -19,7 +19,9 @@ import org.json.simple.parser.ParseException;
 import form.Enum.BankType;
 
 /**
- * 서버와 직접적으로 통신하기 위해서 사용하는 클래스이다.
+ * 서버와 직접적으로 통신을 수행한다. TransactionDAO와 서버 사이를 연결하는 다리역할.
+ * 
+ * @author 정의철
  */
 public class ClientSocket implements Closeable {
     private String ip;

@@ -15,12 +15,20 @@ import org.json.simple.parser.ParseException;
 
 import form.Enum.BankType;
 
+/**
+ * 클라이언트와 연결을 수립하기 전에 클라이언트의 아이디와 비밀번호가 올바르게 입력되었는가를 검증한다.
+ * @author 정의철
+ *
+ */
 public class Authentication {
     private String id;
     private String pw;
     private String address;
     private Connection conn[] = new Connection[BankType.values().length];
 
+    /**
+     * 데이터베이스와 통신할 준비
+     */
     private Authentication() {
         JSONParser parser = new JSONParser();
 
@@ -44,11 +52,22 @@ public class Authentication {
         }
     }
 
+    /**
+     * BankType 별로 알맞은 JDBC URL 리턴
+     * @param bankType 은행 종류
+     * @return url 해당 은행에 알맞은 URL
+     */
     private String getSqlAddress(BankType bankType) {
         return String.format("jdbc:mariadb://%s:3306/%s?"
         + "useUnicode=true&characterEncoding=utf8", this.address, bankType.toString());
     }
 
+    /**
+     * BankType 별로 알맞은 JDBC Connection 객체 리턴
+     * @param bankType 은행 종류
+     * @return Connection DBMS 커넥션
+     * @throws SQLException JDBC 커넥션 생성 실패
+     */
     private synchronized Connection getConnection(BankType bankType) throws SQLException {
         if (conn[bankType.toInt() - 1] == null) {
             // 만약 해당 은행에 대한 Connection이 열려있지 않다면, Connnection을 생성해준다.
@@ -93,13 +112,18 @@ public class Authentication {
         return false;
     }
 
+    /**
+     * Authentication의 인스턴스를 Lazy하게 Holding하고 있는 static 클래스
+     * @author 정의철
+     *
+     */
     private static class LazyHolder {
         // 싱글톤 패턴 구현
         public static final Authentication INSTANCE = new Authentication();
     }
 
     /**
-     * Singleton-pattern. 인스턴스 리턴
+     * Authentication 인스턴스 리턴
      * 
      * @return instance
      */

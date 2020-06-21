@@ -16,8 +16,10 @@ import javax.security.auth.login.LoginException;
 import form.Enum.BankType;
 
 /**
- * 서버와 통신하기 위한 클래스이다. 싱글톤 패턴으로 디자인되어 있으므로, login메소드를 먼저 호출해야 인스턴스를 얻을 수 있다.
+ * 서버와 통신하기 위한 클래스이다. <strong>싱글톤 패턴</strong>으로 디자인되어 있으므로, login메소드를 먼저 호출해야 인스턴스를 얻을 수 있다.
  * login이후에는 getInstance() 메소드를 통해 인스턴스를 리턴받을 수 있다.
+ * 
+ * @author 정의철
  */
 public class TransactionDAO {
     /**
@@ -44,13 +46,13 @@ public class TransactionDAO {
     }
 
     /**
-     * 로그인 메소드. 로그인 성공시 객체를 리턴한다.
+     * 로그인 메소드. 로그인 성공시 TransactionDAO 객체를 리턴한다.
      * 
-     * @param id
-     * @param pw
-     * @param 은행종류
-     * @return self
-     * @throws LoginException
+     * @param id 고객 아이디
+     * @param pw 고객 비밀번호
+     * @param bankType 은행 종류
+     * @return instance TransactionDAO 객체
+     * @throws LoginException 로그인 실패할 경우
      */
     public synchronized static TransactionDAO login(String id, String pw, BankType bankType) throws LoginException {
         if (instance != null) {
@@ -82,26 +84,31 @@ public class TransactionDAO {
      */
     public static TransactionDAO getInstance() {
         if (instance == null) {
-            throw new IllegalStateException("You Must be loggedin before calling getInstance() method.");
+            throw new IllegalStateException("You Must be logged in before calling getInstance() method.");
         }
         return instance;
     }
 
     /**
-     * 인스턴스를 null로 초기화 하며, 서버와의 연결을 종료한다. 로그아웃 이후에 login이외의 메소드를 호출할 경우, 예외를 발생시키니
+     * 인스턴스를 null로 초기화 하며, 서버와의 연결을 종료한다. 로그아웃 이후에 TransactionDAO의 메소드를 호출할 경우, 예외를 발생시키니
      * 주의.
      * 
-     * @throws IOException
+     * @throws IOException 로그아웃 실패
      */
     public static void logout() throws IOException {
         if (instance == null) {
-            throw new IllegalStateException("You Must be loggedin before calling logout() method.");
+            throw new IllegalStateException("You Must be logged in before calling logout() method.");
         }
         instance = null;
         instance.socket.close();
         instance.socket = null;
     }
 
+    /**
+     * String 데이터를 받아서 Object타입으로 역직렬화 한다.
+     * @param objString 직렬화된 데이터
+     * @return objectMember 역직렬화된 객체
+     */
     private Object getObject(String objString) {
         byte[] serializedMember = Base64.getDecoder().decode(objString);   // Base64 -> 바이트 배열로 변환
         try (ByteArrayInputStream bais = new ByteArrayInputStream(serializedMember);
@@ -119,7 +126,7 @@ public class TransactionDAO {
 
     /**
      * 계좌선택 화면에서 고객이 선택한 계좌를 set할 때 사용.
-     * @param account
+     * @param account 계좌
      */
     public void setSelectedAccount(String account) {
         this.selectedAccount = account;
@@ -142,7 +149,7 @@ public class TransactionDAO {
 
     /**
      * 로그인 창에서 고객이 선택한 은행을 받아온다.
-     * @return 은행타입
+     * @return bankType 은행타입
      */
     public BankType getSelectedBankType() {
         return this.selectedBankType;
@@ -157,7 +164,7 @@ public class TransactionDAO {
 
     /**
      * 고객이 마지막으로 전송한 거래를 받아온다.
-     * @return
+     * @return previousTransaction 이전에 진행한 거래
      */
     public Transaction getPreviousTransaction() {
         return this.previousTransaction;
@@ -188,7 +195,7 @@ public class TransactionDAO {
     }
 
     /**
-     * 데이터베이스로 부터 나의 거래 내역을 리턴. 만약 거래 내역이 없다면, null을 리턴한다. &#10;<strong>서버랑 직접적으로 통신하는 메소드이므로, 너무 많이 호출하지 말것!</strong>
+     * 데이터베이스로 부터 나의 거래 내역을 리턴. 만약 거래 내역이 없다면, null을 리턴한다. <br><strong>서버랑 직접적으로 통신하는 메소드이므로, 너무 많이 호출하지 말것!</strong>
      * 
      * @return 거래_내역
      * @throws ServerNotActiveException
@@ -296,13 +303,13 @@ public class TransactionDAO {
 
     /**
      * 계좌 정보를 찾아서 Account 객체를 리턴한다. 계좌 정보를 찾지 못할 경우 AccountNotFoundException 예외를
-     * 발생시킨다. <strong>서버랑 직접적으로 통신하는 메소드이므로, 너무 많이 호출하지 말것!<strong/>
+     * 발생시킨다. &nbsp;<strong>서버랑 직접적으로 통신하는 메소드이므로, 너무 많이 호출하지 말것!</strong>
      * 
      * @param accountNumber 계좌번호
      * @param banktype      은행종류
      * @return Account 계좌
-     * @throws AccountNotFoundException
-     * @throws ServerNotActiveException
+     * @throws AccountNotFoundException 찾고자 하는 계좌가 없을 경우
+     * @throws ServerNotActiveException 서버 통신 종료
      */
     public Account searchAccount(String accountNumber, BankType banktype)
             throws AccountNotFoundException, ServerNotActiveException {

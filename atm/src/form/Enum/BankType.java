@@ -1,5 +1,10 @@
 package form.Enum;
 
+/**
+ * 은행의 목록
+ * @author 정의철
+ *
+ */
 public enum BankType {
     MDCBank("MDCBank", 1),
     KAKAOBank("KAKAOBank", 2),
@@ -14,9 +19,14 @@ public enum BankType {
         this.num = num;
     }
 
-    public static BankType parseBank(int a) {
+    /**
+     * int -> BankType
+     * @param n 순번
+     * @return val 은행 종류
+     */
+    public static BankType parseBank(int n) {
         for (BankType val : values()) {
-            if(val.num == a) return val;
+            if(val.num == n) return val;
         }
         return null;
     }
@@ -26,6 +36,10 @@ public enum BankType {
         return this.str;
     }
 
+    /**
+     * BankType -> int
+     * @return num 은행 순번
+     */
     public int toInt() {
         return this.num;
     }
