@@ -2,8 +2,12 @@ package application;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.server.ServerNotActiveException;
 import java.util.ResourceBundle;
 
+import javax.security.auth.login.AccountNotFoundException;
+
+import form.Account;
 import form.TransactionDAO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +22,7 @@ public class MainmenuController implements Initializable {
 	@FXML
 	Label welcome;
 	@FXML
-	Label Account;
+	Label accountLabel;
 	@FXML
 	Button deposit;
 	@FXML
@@ -26,33 +30,25 @@ public class MainmenuController implements Initializable {
 	@FXML
 	Button send;
 	@FXML
-	Button T;
+	Button T;	// Transaction Button
 	@FXML
-	Button account;
+	Button account;	// back to account select window
 	@FXML
 	Button logout;
 
+	private TransactionDAO dao = TransactionDAO.getInstance();
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		/*
-		 * 계좌 아이디를 불러와서 출력
-		 */
-		/*
-		 * dao=getlogin(); welcome.setText(dao);
-		 */
-		/*
-		 * 계좌 번호를 출력
-		 */
 
-		/*
-		 * Account.setText(dao);
-		 *
-		 * 계좌 선택 화면으로 돌아가기
-		 */
+		welcome.setText(dao.getUserId() + "님 환영합니다!");
+		String accountNumber = dao.getSelectedDashedAccount();
+		accountLabel.setText(accountNumber);
+
 		account.setOnAction(e -> {
 			Parent login;
 			try {
-				login = FXMLLoader.load(getClass().getResource("Account.fxml"));
+				login = FXMLLoader.load(getClass().getResource("fxml/AccountChoose.fxml"));
 				Scene scene = new Scene(login);
 
 				Stage primaryStage = (Stage) account.getScene().getWindow(); // 현재 윈도우 가져오기
@@ -68,7 +64,7 @@ public class MainmenuController implements Initializable {
 		deposit.setOnAction(e -> {
 			Parent login;
 			try {
-				login = FXMLLoader.load(getClass().getResource("deposit.fxml"));
+				login = FXMLLoader.load(getClass().getResource("fxml/deposit.fxml"));
 				Scene scene = new Scene(login);
 
 				Stage primaryStage = (Stage) deposit.getScene().getWindow(); // 현재 윈도우 가져오기
@@ -84,7 +80,7 @@ public class MainmenuController implements Initializable {
 		withdraw.setOnAction(e -> {
 			Parent login;
 			try {
-				login = FXMLLoader.load(getClass().getResource("withdraw.fxml"));
+				login = FXMLLoader.load(getClass().getResource("fxml/withdraw.fxml"));
 				Scene scene = new Scene(login);
 
 				Stage primaryStage = (Stage) withdraw.getScene().getWindow(); // 현재 윈도우 가져오기
@@ -101,7 +97,7 @@ public class MainmenuController implements Initializable {
 		send.setOnAction(e -> {
 			Parent login;
 			try {
-				login = FXMLLoader.load(getClass().getResource("Send.fxml"));
+				login = FXMLLoader.load(getClass().getResource("fxml/Send.fxml"));
 				Scene scene = new Scene(login);
 
 				Stage primaryStage = (Stage) send.getScene().getWindow(); // 현재 윈도우 가져오기
@@ -117,7 +113,7 @@ public class MainmenuController implements Initializable {
 		T.setOnAction(e -> {
 			Parent login;
 			try {
-				login = FXMLLoader.load(getClass().getResource("Record.fxml"));
+				login = FXMLLoader.load(getClass().getResource("fxml/Record.fxml"));
 				Scene scene = new Scene(login);
 
 				Stage primaryStage = (Stage) T.getScene().getWindow(); // 현재 윈도우 가져오기
@@ -127,6 +123,7 @@ public class MainmenuController implements Initializable {
 				e1.printStackTrace();
 			}
 		});
+
 		/*
 		 * 로그아웃, 로그인 화면으로 전환하기
 		 */
@@ -139,7 +136,7 @@ public class MainmenuController implements Initializable {
 
 			Parent login;
 			try {
-				login = FXMLLoader.load(getClass().getResource("login.fxml"));
+				login = FXMLLoader.load(getClass().getResource("fxml/login.fxml"));
 				Scene scene = new Scene(login);
 
 				Stage primaryStage = (Stage) logout.getScene().getWindow(); // 현재 윈도우 가져오기

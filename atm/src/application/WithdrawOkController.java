@@ -37,7 +37,7 @@ public class WithdrawOkController implements Initializable{
      * @throws Exception
      */
     public void OkAction(ActionEvent event) throws Exception{
-        Parent main = FXMLLoader.load(getClass().getResource("Mainmenu.fxml")); // 메인화면 연결
+        Parent main = FXMLLoader.load(getClass().getResource("fxml/Mainmenu.fxml")); // 메인화면 연결
         Scene scene = new Scene(main);
         Stage primaryStage = (Stage)Ok.getScene().getWindow();
         primaryStage.setScene(scene);

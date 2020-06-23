@@ -9,7 +9,10 @@ import java.util.concurrent.Executors;
 import javax.security.auth.login.LoginException;
 
 /**
- * Client로 부터 받아온 정보를 토대로, DAO와 통신한다.
+ * 은행의 서버.
+ * 클라이언트와의 연결을 수립한 이후, 스레드를 생성하여 DatabaseDAO에게 소켓을 넘겨준다.
+ * 
+ * @author 정의철
  */
 public class ServerController {
     public static void main(String[] args) {
@@ -31,7 +34,6 @@ public class ServerController {
                     // Thread 실행
                     receiver.execute(new DatabaseDAO(new ClientConnectionSocket(client)));
                 } catch (LoginException e) {
-                    client.getOutputStream().write(0);  // 로그인 실패 메시지
                     client.close(); // 로그인 실패시 소켓 연결 close
                 }
             }

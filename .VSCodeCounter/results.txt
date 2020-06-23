@@ -1,15 +1,15 @@
-Date : 2020-06-18 03:18:57
+Date : 2020-06-23 21:48:31
 Directory : d:\git\atmAssignment
-Total : 33 files,  2860 codes, 262 comments, 551 blanks, all 3673 lines
+Total : 57 files,  5273 codes, 671 comments, 766 blanks, all 6710 lines
 
 Languages
 +------------+------------+------------+------------+------------+------------+
 | language   | files      | code       | comment    | blank      | total      |
 +------------+------------+------------+------------+------------+------------+
+| Java       |         28 |      2,075 |        593 |        378 |      3,046 |
 | Markdown   |          9 |      1,860 |          0 |        347 |      2,207 |
-| Java       |         17 |        958 |        261 |        196 |      1,415 |
-| XML        |          2 |         20 |          0 |          7 |         27 |
-| yUML       |          1 |         10 |          0 |          0 |         10 |
+| XML        |         14 |      1,292 |         72 |         39 |      1,403 |
+| yUML       |          2 |         34 |          5 |          1 |         40 |
 | JSON       |          2 |          9 |          0 |          0 |          9 |
 | Properties |          1 |          3 |          0 |          1 |          4 |
 | CSS        |          1 |          0 |          1 |          0 |          1 |
@@ -19,14 +19,15 @@ Directories
 +----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
 | path                                                                                   | files      | code       | comment    | blank      | total      |
 +----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
-| .                                                                                      |         33 |      2,860 |        262 |        551 |      3,673 |
-| atm                                                                                    |         22 |        987 |        262 |        203 |      1,452 |
-| atm\src                                                                                |         22 |        987 |        262 |        203 |      1,452 |
-| atm\src\application                                                                    |          8 |        146 |         20 |         48 |        214 |
-| atm\src\form                                                                           |          7 |        318 |        131 |         62 |        511 |
-| atm\src\form\Enum                                                                      |          2 |         26 |          0 |          6 |         32 |
-| atm\src\server                                                                         |          7 |        523 |        111 |         93 |        727 |
-| atm\src\server\Enum                                                                    |          1 |          8 |          0 |          1 |          9 |
+| .                                                                                      |         57 |      5,273 |        671 |        766 |      6,710 |
+| atm                                                                                    |         43 |      2,978 |        594 |        415 |      3,987 |
+| atm\src                                                                                |         43 |      2,978 |        594 |        415 |      3,987 |
+| atm\src\application                                                                    |         29 |      2,008 |        180 |        237 |      2,425 |
+| atm\src\application\fxml                                                               |         12 |        894 |          0 |         37 |        931 |
+| atm\src\form                                                                           |          7 |        392 |        235 |         78 |        705 |
+| atm\src\form\Enum                                                                      |          2 |         32 |         28 |          7 |         67 |
+| atm\src\server                                                                         |          7 |        578 |        179 |        100 |        857 |
+| atm\src\server\Enum                                                                    |          1 |          9 |         23 |          1 |         33 |
 | dependency                                                                             |         10 |      1,863 |          0 |        348 |      2,211 |
 | dependency\javafx-sdk-11.0.2                                                           |         10 |      1,863 |          0 |        348 |      2,211 |
 | dependency\javafx-sdk-11.0.2\legal                                                     |          9 |      1,860 |          0 |        347 |      2,207 |
@@ -40,29 +41,53 @@ Files
 +----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
 | filename                                                                               | language   | code       | comment    | blank      | total      |
 +----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
-| d:\git\atmAssignment\Usecase Diagram.yuml                                              | yUML       |         10 |          0 |          0 |         10 |
+| d:\git\atmAssignment\Usecase Diagram.svg                                               | XML        |        132 |         25 |          1 |        158 |
+| d:\git\atmAssignment\Usecase Diagram.yuml                                              | yUML       |         11 |          3 |          1 |         15 |
+| d:\git\atmAssignment\View Flow.svg                                                     | XML        |        266 |         47 |          1 |        314 |
+| d:\git\atmAssignment\View Flow.yuml                                                    | yUML       |         23 |          2 |          0 |         25 |
+| d:\git\atmAssignment\atm\src\application\AccountListController.java                    | Java       |        223 |          9 |         20 |        252 |
 | d:\git\atmAssignment\atm\src\application\ApplicationTest.java                          | Java       |         13 |          0 |          3 |         16 |
+| d:\git\atmAssignment\atm\src\application\CreateAccount.java                            | Java       |         67 |          4 |          9 |         80 |
+| d:\git\atmAssignment\atm\src\application\DepositController.java                        | Java       |         67 |         27 |         13 |        107 |
+| d:\git\atmAssignment\atm\src\application\DepositOkController.java                      | Java       |         40 |         32 |          5 |         77 |
 | d:\git\atmAssignment\atm\src\application\Example.java                                  | Java       |         31 |          7 |         11 |         49 |
-| d:\git\atmAssignment\atm\src\application\F.fxml                                        | XML        |         10 |          0 |          3 |         13 |
-| d:\git\atmAssignment\atm\src\application\Fcon.java                                     | Java       |         29 |          6 |         11 |         46 |
+| d:\git\atmAssignment\atm\src\application\LoginController.java                          | Java       |        111 |          9 |         11 |        131 |
+| d:\git\atmAssignment\atm\src\application\LoginMain.java                                | Java       |         23 |          0 |          3 |         26 |
 | d:\git\atmAssignment\atm\src\application\Main.java                                     | Java       |         24 |          0 |          5 |         29 |
-| d:\git\atmAssignment\atm\src\application\Sample.fxml                                   | XML        |         10 |          0 |          4 |         14 |
-| d:\git\atmAssignment\atm\src\application\SampleController.java                         | Java       |         29 |          6 |         11 |         46 |
+| d:\git\atmAssignment\atm\src\application\MainmenuController.java                       | Java       |        117 |         12 |         34 |        163 |
+| d:\git\atmAssignment\atm\src\application\RecordController.java                         | Java       |         56 |          5 |         15 |         76 |
+| d:\git\atmAssignment\atm\src\application\SendController.java                           | Java       |        130 |         10 |         29 |        169 |
+| d:\git\atmAssignment\atm\src\application\SendsuccessController.java                    | Java       |         54 |          1 |         12 |         67 |
+| d:\git\atmAssignment\atm\src\application\TableRowModel.java                            | Java       |         53 |          0 |         14 |         67 |
+| d:\git\atmAssignment\atm\src\application\WithdrawController.java                       | Java       |         66 |         31 |         10 |        107 |
+| d:\git\atmAssignment\atm\src\application\WithdrawOkController.java                     | Java       |         39 |         32 |          6 |         77 |
 | d:\git\atmAssignment\atm\src\application\application.css                               | CSS        |          0 |          1 |          0 |          1 |
-| d:\git\atmAssignment\atm\src\form\Account.java                                         | Java       |         27 |         21 |          7 |         55 |
-| d:\git\atmAssignment\atm\src\form\ClientSocket.java                                    | Java       |         82 |         29 |         14 |        125 |
-| d:\git\atmAssignment\atm\src\form\Enum\BankType.java                                   | Java       |         20 |          0 |          5 |         25 |
-| d:\git\atmAssignment\atm\src\form\Enum\TransactionType.java                            | Java       |          6 |          0 |          1 |          7 |
+| d:\git\atmAssignment\atm\src\application\fxml\AccountChoose.fxml                       | XML        |        204 |          0 |          3 |        207 |
+| d:\git\atmAssignment\atm\src\application\fxml\Deal.fxml                                | XML        |         36 |          0 |          3 |         39 |
+| d:\git\atmAssignment\atm\src\application\fxml\Deposit.fxml                             | XML        |         58 |          0 |          3 |         61 |
+| d:\git\atmAssignment\atm\src\application\fxml\Deposit_ok.fxml                          | XML        |         96 |          0 |          3 |         99 |
+| d:\git\atmAssignment\atm\src\application\fxml\Mainmenu.fxml                            | XML        |         16 |          0 |          3 |         19 |
+| d:\git\atmAssignment\atm\src\application\fxml\Record.fxml                              | XML        |         38 |          0 |          3 |         41 |
+| d:\git\atmAssignment\atm\src\application\fxml\Sample.fxml                              | XML        |         10 |          0 |          4 |         14 |
+| d:\git\atmAssignment\atm\src\application\fxml\Send.fxml                                | XML        |         90 |          0 |          3 |         93 |
+| d:\git\atmAssignment\atm\src\application\fxml\Sendsuccess.fxml                         | XML        |         96 |          0 |          3 |         99 |
+| d:\git\atmAssignment\atm\src\application\fxml\Withdraw.fxml                            | XML        |         58 |          0 |          3 |         61 |
+| d:\git\atmAssignment\atm\src\application\fxml\Withdraw_ok.fxml                         | XML        |         96 |          0 |          3 |         99 |
+| d:\git\atmAssignment\atm\src\application\fxml\login.fxml                               | XML        |         96 |          0 |          3 |         99 |
+| d:\git\atmAssignment\atm\src\form\Account.java                                         | Java       |         37 |         28 |          9 |         74 |
+| d:\git\atmAssignment\atm\src\form\ClientSocket.java                                    | Java       |         89 |         32 |         14 |        135 |
+| d:\git\atmAssignment\atm\src\form\Enum\BankType.java                                   | Java       |         26 |         14 |          6 |         46 |
+| d:\git\atmAssignment\atm\src\form\Enum\TransactionType.java                            | Java       |          6 |         14 |          1 |         21 |
 | d:\git\atmAssignment\atm\src\form\ServerProperties.json                                | JSON       |          4 |          0 |          0 |          4 |
-| d:\git\atmAssignment\atm\src\form\Transaction.java                                     | Java       |         31 |          3 |          9 |         43 |
-| d:\git\atmAssignment\atm\src\form\TransactionDAO.java                                  | Java       |        148 |         78 |         26 |        252 |
-| d:\git\atmAssignment\atm\src\server\Authentication.java                                | Java       |         63 |         16 |         10 |         89 |
-| d:\git\atmAssignment\atm\src\server\ClientConnectionSocket.java                        | Java       |         93 |         31 |         17 |        141 |
+| d:\git\atmAssignment\atm\src\form\Transaction.java                                     | Java       |         35 |         31 |         10 |         76 |
+| d:\git\atmAssignment\atm\src\form\TransactionDAO.java                                  | Java       |        195 |        116 |         38 |        349 |
+| d:\git\atmAssignment\atm\src\server\Authentication.java                                | Java       |         78 |         42 |         14 |        134 |
+| d:\git\atmAssignment\atm\src\server\ClientConnectionSocket.java                        | Java       |         95 |         40 |         17 |        152 |
 | d:\git\atmAssignment\atm\src\server\DBProperties.json                                  | JSON       |          5 |          0 |          0 |          5 |
-| d:\git\atmAssignment\atm\src\server\DatabaseDAO.java                                   | Java       |        300 |         57 |         53 |        410 |
-| d:\git\atmAssignment\atm\src\server\Enum\RequsetType.java                              | Java       |          8 |          0 |          1 |          9 |
-| d:\git\atmAssignment\atm\src\server\ServerController.java                              | Java       |         31 |          5 |          7 |         43 |
-| d:\git\atmAssignment\atm\src\server\Test.java                                          | Java       |         23 |          2 |          5 |         30 |
+| d:\git\atmAssignment\atm\src\server\DatabaseDAO.java                                   | Java       |        339 |         64 |         56 |        459 |
+| d:\git\atmAssignment\atm\src\server\Enum\RequsetType.java                              | Java       |          9 |         23 |          1 |         33 |
+| d:\git\atmAssignment\atm\src\server\ServerController.java                              | Java       |         30 |          8 |          7 |         45 |
+| d:\git\atmAssignment\atm\src\server\Test.java                                          | Java       |         22 |          2 |          5 |         29 |
 | d:\git\atmAssignment\dependency\javafx-sdk-11.0.2\legal\javafx.graphics\jpeg_fx.md     | Markdown   |         42 |          0 |          8 |         50 |
 | d:\git\atmAssignment\dependency\javafx-sdk-11.0.2\legal\javafx.media\applecoreaudio.md | Markdown   |         44 |          0 |         10 |         54 |
 | d:\git\atmAssignment\dependency\javafx-sdk-11.0.2\legal\javafx.media\glib.md           | Markdown   |        441 |          0 |         95 |        536 |
@@ -73,5 +98,5 @@ Files
 | d:\git\atmAssignment\dependency\javafx-sdk-11.0.2\legal\javafx.web\libxslt.md          | Markdown   |         19 |          0 |          6 |         25 |
 | d:\git\atmAssignment\dependency\javafx-sdk-11.0.2\legal\javafx.web\webkit.md           | Markdown   |        441 |          0 |         93 |        534 |
 | d:\git\atmAssignment\dependency\javafx-sdk-11.0.2\lib\javafx.properties                | Properties |          3 |          0 |          1 |          4 |
-| Total                                                                                  |            |      2,860 |        262 |        551 |      3,673 |
+| Total                                                                                  |            |      5,273 |        671 |        766 |      6,710 |
 +----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

@@ -2,8 +2,12 @@ package application;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.server.ServerNotActiveException;
 import java.util.ResourceBundle;
 
+import form.Transaction;
+import form.TransactionDAO;
+import form.Enum.TransactionType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -25,25 +29,36 @@ public class RecordController implements Initializable{
 	@FXML private TableColumn<TableRowModel, String> subject;
 	@FXML private TableColumn<TableRowModel, String> amount;
 	@FXML private TableColumn<TableRowModel, String> balance;
+
+	private TransactionDAO dao = TransactionDAO.getInstance();
 	
 	ObservableList<TableRowModel> list=null;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		list=FXCollections.observableArrayList();
-		/*
-		 * 리스트에 거래내역 출력하기
-		 */
-		/*
-		 for(Transaction d: ) {
-		 
-			list.add(new TableRowModel(d.number,d.kind,d.subject,d.amount,d.balance);//거래내역 정보를 가져와 list에 저장하기
+		list = FXCollections.observableArrayList();
+		
+		try {
+			Transaction[] transactionList = dao.getTransactionList();
+
+			for (Transaction transaction : transactionList) {
+				if(transaction.getTransactionType() == TransactionType.TRANSFER) {
+					// 나 -> 타인
+					transaction.getTo().getAccountNumber();
+				}
+				// list.add(new TableRowModel(num, kind, subject, amount, balance))
+				//list.add(new TableRowModel(0, transaction.getTransactionType().toString(),
+				//				"출금", amount, balance));
+				// TODO 맞게 작성
+			}
+		} catch (ServerNotActiveException e) {
+			e.printStackTrace();
 		}
-		*/
+
 		backtoMainmenu.setOnAction(e -> {
             Parent login;
             try {
-                login = FXMLLoader.load(getClass().getResource("Mainmenu.fxml"));
+                login = FXMLLoader.load(getClass().getResource("fxml/Mainmenu.fxml"));
                 Scene scene = new Scene(login);
         
                 Stage primaryStage = (Stage)backtoMainmenu.getScene().getWindow(); // 현재 윈도우 가져오기

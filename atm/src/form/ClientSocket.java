@@ -19,7 +19,9 @@ import org.json.simple.parser.ParseException;
 import form.Enum.BankType;
 
 /**
- * 서버와 직접적으로 통신하기 위해서 사용하는 클래스이다.
+ * 서버와 직접적으로 통신을 수행한다. TransactionDAO와 서버 사이를 연결하는 다리역할.
+ * 
+ * @author 정의철
  */
 public class ClientSocket implements Closeable {
     private String ip;
@@ -33,7 +35,7 @@ public class ClientSocket implements Closeable {
     private BufferedReader br;
 
     /**
-     * ServerProperties.json에서 서버 주소를 불러와, 연결을 수행한다.
+     * ServerProperties.json에서 서버 주소를 불러와서 소켓 연결을 수행한다.
      */
     public ClientSocket() {
         JSONParser parser = new JSONParser();
@@ -68,8 +70,8 @@ public class ClientSocket implements Closeable {
 
     /**
      * 서버에 String을 전송하기 위한 메소드
-     * @param msg
-     * @throws IOException
+     * @param msg String메시지
+     * @throws IOException 서버 연결 강제 종료
      */
     public void send(String msg) {
         try {
@@ -86,8 +88,8 @@ public class ClientSocket implements Closeable {
     /**
      * 서버로 부터 String을 전달 받기위한 메소드
      * 
-     * @return msg
-     * @throws IOException
+     * @return msg 서버가 전송한 메시지
+     * @throws IOException 서버 연결 강제 종료
      */
     public String recv() throws IOException {
         String line = br.readLine();
@@ -100,13 +102,13 @@ public class ClientSocket implements Closeable {
 
     /**
      * 서버에 로그인을 요청한다. 로그인 성공 여부를 리턴.
-     * @param id
-     * @param pw
-     * @return isLoggedIn
+     * @param id 고객 아이디
+     * @param pw 고객 비밀번호
+     * @param bankType 고객 은행 종류
+     * @return isLoggedIn 로그인 성공 여부
      */
     public boolean login(String id, String pw, BankType bankType) {
         try {
-            send("login");
             send(id);
             send(pw);
             send(bankType.name());

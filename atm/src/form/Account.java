@@ -6,7 +6,9 @@ import java.math.BigInteger;
 import form.Enum.BankType;
 
 /**
- * "계좌"를 표현한 클래스이다. 계좌번호, 사용은행, 잔고를 담고 있으며, Serializable하다.
+ * <strong>계좌</strong>를 표현한 클래스이다. 계좌번호, 사용은행, 잔고를 담고 있으며, Serializable하다.
+ * 
+ * @author 정의철
  */
 public class Account implements Serializable {
     private static final long serialVersionUID = 3835905242342972326L;  // 시리얼 버전
@@ -16,9 +18,9 @@ public class Account implements Serializable {
 
     /**
      * 계좌 정보 초기화
-     * @param accountNumber
-     * @param bankType
-     * @param balance
+     * @param accountNumber 계좌번호(하이픈 추가되지 않도록 주의)
+     * @param bankType 은행 종류
+     * @param balance 잔고
      */
     public Account (String accountNumber, BankType bankType, BigInteger balance) {
         if(accountNumber.length() > 14) {
@@ -32,10 +34,21 @@ public class Account implements Serializable {
 
     /**
      * 계좌번호 리턴
-     * @return 계좌번호
+     * @return accountNumber 계좌번호
      */
     public String getAccountNumber() {
         return this.accountNumber;
+    }
+
+    /**
+     * 하이픈이 추가된 계좌번호 리턴
+     * @return accountNumber 하이픈 추가된 계좌번호
+     */
+    public String getDashedAccountNumber() {
+        StringBuffer sBuffer = new StringBuffer(this.accountNumber);
+        sBuffer.insert(3, '-');
+        sBuffer.insert(8, '-');
+        return sBuffer.toString();
     }
 
     /**
@@ -52,5 +65,10 @@ public class Account implements Serializable {
      */
     public BigInteger getBalance() {
         return this.balance;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s %s", getAccountNumber(), getBankType(), getBalance());
     }
 }

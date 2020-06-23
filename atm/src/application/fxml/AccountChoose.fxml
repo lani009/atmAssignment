@@ -17,7 +17,7 @@
          <children>
             <BorderPane prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: #fff;">
                <center>
-                  <GridPane BorderPane.alignment="CENTER">
+                  <GridPane fx:id="grid" BorderPane.alignment="CENTER">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -51,7 +51,7 @@
                                  </font>
                               </Text>
                               <Label fx:id="AccountNumber1" layoutX="98.0" layoutY="53.0" prefHeight="24.0" prefWidth="287.0" text="????" />
-                              <Button fx:id="select1" layoutX="80.0" layoutY="16.0" mnemonicParsing="false" onAction="#select1" text="선택_1" />
+                              <Button fx:id="select1" layoutX="80.0" layoutY="16.0" mnemonicParsing="false" text="선택_1" />
                            </children>
                         </Pane>
                         <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;" GridPane.rowIndex="1">
@@ -77,7 +77,7 @@
                                  </font>
                               </Text>
                               <Label fx:id="AccountNumber3" layoutX="98.0" layoutY="53.0" prefHeight="24.0" prefWidth="287.0" text="????" />
-                              <Button fx:id="select3" layoutX="80.0" layoutY="16.0" mnemonicParsing="false" onAction="#select3" text="선택_3" />
+                              <Button fx:id="select3" layoutX="80.0" layoutY="16.0" mnemonicParsing="false" text="선택_3" />
                            </children>
                         </Pane>
                         <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;" GridPane.rowIndex="2">
