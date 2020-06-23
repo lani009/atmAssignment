@@ -18,9 +18,9 @@ public class Account implements Serializable {
 
     /**
      * 계좌 정보 초기화
-     * @param accountNumber
-     * @param bankType
-     * @param balance
+     * @param accountNumber 계좌번호(하이픈 추가되지 않도록 주의)
+     * @param bankType 은행 종류
+     * @param balance 잔고
      */
     public Account (String accountNumber, BankType bankType, BigInteger balance) {
         if(accountNumber.length() > 14) {
@@ -34,10 +34,21 @@ public class Account implements Serializable {
 
     /**
      * 계좌번호 리턴
-     * @return 계좌번호
+     * @return accountNumber 계좌번호
      */
     public String getAccountNumber() {
         return this.accountNumber;
+    }
+
+    /**
+     * 하이픈이 추가된 계좌번호 리턴
+     * @return accountNumber 하이픈 추가된 계좌번호
+     */
+    public String getDashedAccountNumber() {
+        StringBuffer sBuffer = new StringBuffer(this.accountNumber);
+        sBuffer.insert(3, '-');
+        sBuffer.insert(8, '-');
+        return sBuffer.toString();
     }
 
     /**

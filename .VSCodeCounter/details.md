@@ -1,10 +1,10 @@
 # Details
 
-Date : 2020-06-22 03:50:15
+Date : 2020-06-23 21:48:31
 
 Directory d:\git\atmAssignment
 
-Total : 55 files,  4917 codes, 475 comments, 749 blanks, all 6141 lines
+Total : 57 files,  5273 codes, 671 comments, 766 blanks, all 6710 lines
 
 [summary](results.md)
 
@@ -13,21 +13,23 @@ Total : 55 files,  4917 codes, 475 comments, 749 blanks, all 6141 lines
 | :--- | :--- | ---: | ---: | ---: | ---: |
 | [Usecase Diagram.svg](/Usecase Diagram.svg) | XML | 132 | 25 | 1 | 158 |
 | [Usecase Diagram.yuml](/Usecase Diagram.yuml) | yUML | 11 | 3 | 1 | 15 |
-| [atm/src/application/AccountListController.java](/atm/src/application/AccountListController.java) | Java | 203 | 9 | 21 | 233 |
+| [View Flow.svg](/View Flow.svg) | XML | 266 | 47 | 1 | 314 |
+| [View Flow.yuml](/View Flow.yuml) | yUML | 23 | 2 | 0 | 25 |
+| [atm/src/application/AccountListController.java](/atm/src/application/AccountListController.java) | Java | 223 | 9 | 20 | 252 |
 | [atm/src/application/ApplicationTest.java](/atm/src/application/ApplicationTest.java) | Java | 13 | 0 | 3 | 16 |
 | [atm/src/application/CreateAccount.java](/atm/src/application/CreateAccount.java) | Java | 67 | 4 | 9 | 80 |
-| [atm/src/application/DepositController.java](/atm/src/application/DepositController.java) | Java | 67 | 24 | 12 | 103 |
+| [atm/src/application/DepositController.java](/atm/src/application/DepositController.java) | Java | 67 | 27 | 13 | 107 |
 | [atm/src/application/DepositOkController.java](/atm/src/application/DepositOkController.java) | Java | 40 | 32 | 5 | 77 |
 | [atm/src/application/Example.java](/atm/src/application/Example.java) | Java | 31 | 7 | 11 | 49 |
-| [atm/src/application/LoginController.java](/atm/src/application/LoginController.java) | Java | 96 | 9 | 10 | 115 |
+| [atm/src/application/LoginController.java](/atm/src/application/LoginController.java) | Java | 111 | 9 | 11 | 131 |
 | [atm/src/application/LoginMain.java](/atm/src/application/LoginMain.java) | Java | 23 | 0 | 3 | 26 |
 | [atm/src/application/Main.java](/atm/src/application/Main.java) | Java | 24 | 0 | 5 | 29 |
-| [atm/src/application/MainmenuController.java](/atm/src/application/MainmenuController.java) | Java | 116 | 19 | 32 | 167 |
-| [atm/src/application/RecordController.java](/atm/src/application/RecordController.java) | Java | 52 | 2 | 16 | 70 |
-| [atm/src/application/SendController.java](/atm/src/application/SendController.java) | Java | 124 | 2 | 20 | 146 |
-| [atm/src/application/SendsuccessController.java](/atm/src/application/SendsuccessController.java) | Java | 49 | 0 | 9 | 58 |
+| [atm/src/application/MainmenuController.java](/atm/src/application/MainmenuController.java) | Java | 117 | 12 | 34 | 163 |
+| [atm/src/application/RecordController.java](/atm/src/application/RecordController.java) | Java | 56 | 5 | 15 | 76 |
+| [atm/src/application/SendController.java](/atm/src/application/SendController.java) | Java | 130 | 10 | 29 | 169 |
+| [atm/src/application/SendsuccessController.java](/atm/src/application/SendsuccessController.java) | Java | 54 | 1 | 12 | 67 |
 | [atm/src/application/TableRowModel.java](/atm/src/application/TableRowModel.java) | Java | 53 | 0 | 14 | 67 |
-| [atm/src/application/WithdrawController.java](/atm/src/application/WithdrawController.java) | Java | 66 | 25 | 10 | 101 |
+| [atm/src/application/WithdrawController.java](/atm/src/application/WithdrawController.java) | Java | 66 | 31 | 10 | 107 |
 | [atm/src/application/WithdrawOkController.java](/atm/src/application/WithdrawOkController.java) | Java | 39 | 32 | 6 | 77 |
 | [atm/src/application/application.css](/atm/src/application/application.css) | CSS | 0 | 1 | 0 | 1 |
 | [atm/src/application/fxml/AccountChoose.fxml](/atm/src/application/fxml/AccountChoose.fxml) | XML | 204 | 0 | 3 | 207 |
@@ -42,19 +44,19 @@ Total : 55 files,  4917 codes, 475 comments, 749 blanks, all 6141 lines
 | [atm/src/application/fxml/Withdraw.fxml](/atm/src/application/fxml/Withdraw.fxml) | XML | 58 | 0 | 3 | 61 |
 | [atm/src/application/fxml/Withdraw_ok.fxml](/atm/src/application/fxml/Withdraw_ok.fxml) | XML | 96 | 0 | 3 | 99 |
 | [atm/src/application/fxml/login.fxml](/atm/src/application/fxml/login.fxml) | XML | 96 | 0 | 3 | 99 |
-| [atm/src/form/Account.java](/atm/src/form/Account.java) | Java | 31 | 22 | 8 | 61 |
-| [atm/src/form/ClientSocket.java](/atm/src/form/ClientSocket.java) | Java | 90 | 30 | 14 | 134 |
-| [atm/src/form/Enum/BankType.java](/atm/src/form/Enum/BankType.java) | Java | 26 | 0 | 6 | 32 |
-| [atm/src/form/Enum/TransactionType.java](/atm/src/form/Enum/TransactionType.java) | Java | 6 | 0 | 1 | 7 |
+| [atm/src/form/Account.java](/atm/src/form/Account.java) | Java | 37 | 28 | 9 | 74 |
+| [atm/src/form/ClientSocket.java](/atm/src/form/ClientSocket.java) | Java | 89 | 32 | 14 | 135 |
+| [atm/src/form/Enum/BankType.java](/atm/src/form/Enum/BankType.java) | Java | 26 | 14 | 6 | 46 |
+| [atm/src/form/Enum/TransactionType.java](/atm/src/form/Enum/TransactionType.java) | Java | 6 | 14 | 1 | 21 |
 | [atm/src/form/ServerProperties.json](/atm/src/form/ServerProperties.json) | JSON | 4 | 0 | 0 | 4 |
-| [atm/src/form/Transaction.java](/atm/src/form/Transaction.java) | Java | 31 | 3 | 9 | 43 |
-| [atm/src/form/TransactionDAO.java](/atm/src/form/TransactionDAO.java) | Java | 192 | 109 | 38 | 339 |
-| [atm/src/server/Authentication.java](/atm/src/server/Authentication.java) | Java | 78 | 18 | 14 | 110 |
-| [atm/src/server/ClientConnectionSocket.java](/atm/src/server/ClientConnectionSocket.java) | Java | 93 | 31 | 17 | 141 |
+| [atm/src/form/Transaction.java](/atm/src/form/Transaction.java) | Java | 35 | 31 | 10 | 76 |
+| [atm/src/form/TransactionDAO.java](/atm/src/form/TransactionDAO.java) | Java | 195 | 116 | 38 | 349 |
+| [atm/src/server/Authentication.java](/atm/src/server/Authentication.java) | Java | 78 | 42 | 14 | 134 |
+| [atm/src/server/ClientConnectionSocket.java](/atm/src/server/ClientConnectionSocket.java) | Java | 95 | 40 | 17 | 152 |
 | [atm/src/server/DBProperties.json](/atm/src/server/DBProperties.json) | JSON | 5 | 0 | 0 | 5 |
-| [atm/src/server/DatabaseDAO.java](/atm/src/server/DatabaseDAO.java) | Java | 337 | 61 | 56 | 454 |
-| [atm/src/server/Enum/RequsetType.java](/atm/src/server/Enum/RequsetType.java) | Java | 9 | 0 | 1 | 10 |
-| [atm/src/server/ServerController.java](/atm/src/server/ServerController.java) | Java | 30 | 5 | 7 | 42 |
+| [atm/src/server/DatabaseDAO.java](/atm/src/server/DatabaseDAO.java) | Java | 339 | 64 | 56 | 459 |
+| [atm/src/server/Enum/RequsetType.java](/atm/src/server/Enum/RequsetType.java) | Java | 9 | 23 | 1 | 33 |
+| [atm/src/server/ServerController.java](/atm/src/server/ServerController.java) | Java | 30 | 8 | 7 | 45 |
 | [atm/src/server/Test.java](/atm/src/server/Test.java) | Java | 22 | 2 | 5 | 29 |
 | [dependency/javafx-sdk-11.0.2/legal/javafx.graphics/jpeg_fx.md](/dependency/javafx-sdk-11.0.2/legal/javafx.graphics/jpeg_fx.md) | Markdown | 42 | 0 | 8 | 50 |
 | [dependency/javafx-sdk-11.0.2/legal/javafx.media/applecoreaudio.md](/dependency/javafx-sdk-11.0.2/legal/javafx.media/applecoreaudio.md) | Markdown | 44 | 0 | 10 | 54 |

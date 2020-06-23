@@ -48,10 +48,16 @@ public class WithdrawController implements Initializable{
         Account 가짜atm = dao.searchAccount("ATM", BankType.MDCBank);
         Account transactionAccount = dao.getAccount(dao.getSelectedAccount());//** 계좌선택에서 받아온 계좌번호 가져오기
         if(dao.checkPassword(pw)) {// 입력한 비밀번호와 해당 ID에 대응되는 비밀번호를 비교
-            Transaction 출금 = new Transaction(TransactionType.WITHDRAWL, transactionAccount, 가짜atm,
+            if(transactionAccount.getBalance().compareTo(BigInteger.valueOf(Integer.parseInt(amount)))==-1) {
+                status.setText("잔고가 부족합니다.");
+                
+                return ;
+            }else {
+                Transaction 출금 = new Transaction(TransactionType.WITHDRAWL, transactionAccount, 가짜atm,
                 BigInteger.valueOf(Integer.parseInt(amount)));
 
-            dao.sendTransaction(출금); // 거래를 처리
+                dao.sendTransaction(출금); // 거래를 처리
+            }
         }
         
         Parent dere = FXMLLoader.load(getClass().getResource("fxml/Withdraw_ok.fxml")); // 출금결과화면 연결

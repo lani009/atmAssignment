@@ -128,6 +128,8 @@ public class ClientConnectionSocket implements Closeable {
                 return RequsetType.SEARCHACCOUNT;
             } else if(input.equals("0") || input.equals("disconnect")) {
                 return RequsetType.DISCONNECT;
+            } else if(input.equals("check password")) {
+                return RequsetType.CHECKPASSWORD;
             }
         } catch (IOException e) {
             e.printStackTrace();

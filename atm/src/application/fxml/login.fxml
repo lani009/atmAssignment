@@ -26,7 +26,7 @@
 <children>
 <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="150.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true">
 <image>
-<Image url="@Jet.png" />
+<Image url="@img/Jet.png" />
 </image>
 </ImageView>
 <Label layoutX="126.0" layoutY="200.0" prefHeight="33.0" prefWidth="163.0" text="Air Bank ATM " textFill="#110101">
@@ -61,7 +61,7 @@
                         </Label>
                         <ImageView fitHeight="60.0" fitWidth="53.0" layoutX="14.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@solider.png" />
+                              <Image url="@img/solider.png" />
                            </image>
                         </ImageView>
                      </children>

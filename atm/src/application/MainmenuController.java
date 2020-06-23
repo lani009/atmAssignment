@@ -22,7 +22,7 @@ public class MainmenuController implements Initializable {
 	@FXML
 	Label welcome;
 	@FXML
-	Label Account;
+	Label accountLabel;
 	@FXML
 	Button deposit;
 	@FXML
@@ -30,9 +30,9 @@ public class MainmenuController implements Initializable {
 	@FXML
 	Button send;
 	@FXML
-	Button T;
+	Button T;	// Transaction Button
 	@FXML
-	Button account;
+	Button account;	// back to account select window
 	@FXML
 	Button logout;
 
@@ -41,29 +41,14 @@ public class MainmenuController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
-		/*
-		 * dao=getlogin(); welcome.setText(dao.id+"님 환영합니다!");//TODO id를 불러오는 메소드 필요
-		 */
-		String id = dao.getUserId(); // id 불러오는 메소드
+		welcome.setText(dao.getUserId() + "님 환영합니다!");
+		String accountNumber = dao.getSelectedDashedAccount();
+		accountLabel.setText(accountNumber);
 
-		/*
-		 * Account.setText(dao); //TODO 계좌 선택화면에서 계좌 번호를 불러오는 메소드 필요
-		 *
-		 * 계좌 선택 화면으로 돌아가기
-		 */
-		String accountNumber = dao.getSelectedAccount(); // 선택된 계좌 불러오는 메소드
-		try {
-			Account accountObject = dao.getAccount(accountNumber);	// 이거 처럼 활용 가능
-		} catch (AccountNotFoundException | ServerNotActiveException e3) {
-			e3.printStackTrace();
-		} 
-
-
-		
 		account.setOnAction(e -> {
 			Parent login;
 			try {
-				login = FXMLLoader.load(getClass().getResource("fxml/Account.fxml"));
+				login = FXMLLoader.load(getClass().getResource("fxml/AccountChoose.fxml"));
 				Scene scene = new Scene(login);
 
 				Stage primaryStage = (Stage) account.getScene().getWindow(); // 현재 윈도우 가져오기
@@ -138,12 +123,13 @@ public class MainmenuController implements Initializable {
 				e1.printStackTrace();
 			}
 		});
+
 		/*
 		 * 로그아웃, 로그인 화면으로 전환하기
 		 */
 		logout.setOnAction(e -> {
 			try {
-				TransactionDAO.logout();//TODO 로그아웃 하기
+				TransactionDAO.logout();
 			} catch (IOException e2) {
 				e2.printStackTrace();
 			}

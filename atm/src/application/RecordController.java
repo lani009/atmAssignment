@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import form.Transaction;
 import form.TransactionDAO;
+import form.Enum.TransactionType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -41,8 +42,13 @@ public class RecordController implements Initializable{
 			Transaction[] transactionList = dao.getTransactionList();
 
 			for (Transaction transaction : transactionList) {
+				if(transaction.getTransactionType() == TransactionType.TRANSFER) {
+					// 나 -> 타인
+					transaction.getTo().getAccountNumber();
+				}
 				// list.add(new TableRowModel(num, kind, subject, amount, balance))
-
+				//list.add(new TableRowModel(0, transaction.getTransactionType().toString(),
+				//				"출금", amount, balance));
 				// TODO 맞게 작성
 			}
 		} catch (ServerNotActiveException e) {

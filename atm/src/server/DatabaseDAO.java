@@ -30,6 +30,7 @@ import server.Enum.RequsetType;
 /**
  * 데이터베이스와 직접적으로 통신하여 클라이언트의 요청을 수행한다.
  * 
+ * 
  * @author 정의철
  */
 public class DatabaseDAO implements Runnable, Closeable {
@@ -72,31 +73,32 @@ public class DatabaseDAO implements Runnable, Closeable {
             RequsetType requsetType = client.getPhase();
             switch (requsetType) {
                 case TRANSACTION:
-                    System.out.println("Transaction requst");
+                    System.out.println("Transaction request");
                     processTransaction();
                     break;
 
                 case GETMYACCOUNTLIST:
-                    System.out.println("Get my Account List requst");
+                    System.out.println("Get my Account List request");
                     sendAccountList();
                     break;
 
                 case GETMYTRANSACTIONLIST:
-                    System.out.println("Get my Transaction List requst");
+                    System.out.println("Get my Transaction List request");
                     getMyTransactionList();
                     break;
 
                 case SEARCHACCOUNT:
-                    System.out.println("Search Account requst");
+                    System.out.println("Search Account request");
                     searchAccount();
                     break;
 
                 case CHECKPASSWORD:
-                    System.out.println("Check Password requst");
+                    System.out.println("Check Password request");
                     checkPassword();
                     break;
 
                 case DISCONNECT:
+                    System.out.println("Disconnect request");
                     try {
                         close();
                         return;
@@ -141,7 +143,7 @@ public class DatabaseDAO implements Runnable, Closeable {
         try {
             Connection conn = getConnection(client.getUserBankType());
             try (PreparedStatement pstmt = conn.prepareStatement(
-                        "SELECT * FROM accounts WHERE id=? AND password=PASSWORD(?)")) {
+                        "SELECT * FROM customer WHERE id=? AND password=PASSWORD(?)")) {
                 pstmt.setString(1, client.getUserId());
                 pstmt.setString(2, client.recv());
                 ResultSet rs = pstmt.executeQuery();
@@ -149,8 +151,10 @@ public class DatabaseDAO implements Runnable, Closeable {
 
                 if(rs.getRow() == 0) {
                     client.send("false");
+                    System.out.println("check password: false");
                 } else {
                     client.send("true");
+                    System.out.println("check password: true");
                 }
                 rs.close();
             } catch (SQLException | IOException e) {
@@ -177,6 +181,7 @@ public class DatabaseDAO implements Runnable, Closeable {
             if (rs.getRow() == 0) {
                 // 일치하는 계좌가 없을 경우
                 client.send("not found");
+                System.out.printf("search Account %s %s: not found", account, bankType.toString());
                 rs.close();
                 pstmt.close();
                 return;
@@ -294,7 +299,7 @@ public class DatabaseDAO implements Runnable, Closeable {
                 // 계좌 객체를 생성한다.
                 Account account = new Account(accountNumber, client.getUserBankType(),
                         BigInteger.valueOf(Long.parseLong(balance)));
-                System.out.println(account);
+                System.out.println("Send: " + account);
 
                 try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         ObjectOutputStream oos = new ObjectOutputStream(baos)) {
@@ -302,7 +307,6 @@ public class DatabaseDAO implements Runnable, Closeable {
                     // serialized -> 직렬화된 account 객체
                     byte[] serialized = baos.toByteArray();
                     client.send(Base64.getEncoder().encodeToString(serialized)); // 바이트 배열로 생성된 직렬화 데이터를 base64로 변환
-                    System.out.println(Base64.getEncoder().encodeToString(serialized));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

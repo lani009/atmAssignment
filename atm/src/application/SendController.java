@@ -28,7 +28,7 @@ public class SendController implements Initializable {
 	@FXML
 	TextField Account;
 	@FXML
-	java.awt.TextField Amount;
+	TextField Amount;
 	@FXML
 	Button backtoMainmenu;
 	@FXML
@@ -52,10 +52,6 @@ public class SendController implements Initializable {
 
 	TransactionDAO dao = TransactionDAO.getInstance();;
 
-	public String Money() {
-		return Amount.getText();
-	}
-
 	public void MDCBankAction(ActionEvent e) {
 		num = 1;
 	}
@@ -72,36 +68,45 @@ public class SendController implements Initializable {
 		num = 4;
 	}
 
+	private void gotoNextPage() {
+		Parent login;
+		try {
+			login = FXMLLoader.load(getClass().getResource("fxml/Sendsuccess.fxml"));
+			Scene scene = new Scene(login);
+
+			Stage primaryStage = (Stage) backtoMainmenu.getScene().getWindow(); // 현재 윈도우 가져오기
+
+			primaryStage.setScene(scene);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		MDCBank.setOnAction(e -> {
-			MDCBank.setOnAction(event -> MDCBankAction(event));
-			Bank.setText("MDCBank");
+			MDCBankAction(e);
 		});
 		KAKAOBank.setOnAction(e -> {
-			KAKAOBank.setOnAction(event -> KAKAOBankAction(event));
-			Bank.setText("KAKAOBank");
+			KAKAOBankAction(e);
+			
 		});
 		NHBank.setOnAction(e -> {
-			MDCBank.setOnAction(event -> NHBankAction(event));
-			Bank.setText("NHBank");
+			NHBankAction(e);
+			
 		});
 		AJOUBank.setOnAction(e -> {
-			MDCBank.setOnAction(event -> AJOUBankAction(event));
-			Bank.setText("AJOUBank");
+			AJOUBankAction(e);
+			
 		});
 		send.setOnAction(e -> {
 			try {
 				Account transactionAccount = dao.getAccount(dao.getSelectedAccount());
-				Account opponentAccount = null;
-				if (num == 1) {
-					opponentAccount = dao.searchAccount(Account.getText(), BankType.MDCBank);
-				} else if (num == 2) {
-					opponentAccount = dao.searchAccount(Account.getText(), BankType.KAKAOBank);
-				} else if (num == 3) {
-					opponentAccount = dao.searchAccount(Account.getText(), BankType.NHBank);
-				} else if (num == 4) {
-					opponentAccount = dao.searchAccount(Account.getText(), BankType.AJOUBank);
+				Account opponentAccount = dao.searchAccount(Account.getText(), BankType.parseBank(num));
+				if(transactionAccount.getBalance().compareTo(BigInteger.valueOf(Long.parseLong(Amount.getText()))) == -1) {
+					message.setText("The balance is lack");
+
+					return;
 				}
 				if (dao.checkPassword(pw.getText())) {
 					Transaction transaction = new Transaction(TransactionType.TRANSFER, transactionAccount,
@@ -109,23 +114,18 @@ public class SendController implements Initializable {
 
 					dao.sendTransaction(transaction);
 				}
+				gotoNextPage();
 			} catch (AccountNotFoundException | ServerNotActiveException e1) {
 				message.setText("Cannot find the account");
 				// 상대방의 계좌를 못 찾았을 경우임.
 				// TODO 추가로 잔고보다 송금하려는 금액이 많을 때 예외 처리
 			}
-			Parent login;
-			try {
-				login = FXMLLoader.load(getClass().getResource("fxml/Sendsuccess.fxml"));
-				Scene scene = new Scene(login);
 
-				Stage primaryStage = (Stage) backtoMainmenu.getScene().getWindow(); // 현재 윈도우 가져오기
-
-				primaryStage.setScene(scene);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
 		});
+
+		Account.textProperty().addListener((observable, oldVal, newVal) -> {
+            detectString(Account, oldVal, newVal);
+        });
 
 		backtoMainmenu.setOnAction(e -> {
 			Parent login;
@@ -142,4 +142,27 @@ public class SendController implements Initializable {
 		});
 
 	}
+
+	/**
+     * 텍스트 필드에 non-int 타입의 값이 입력되는 것을 방지한다.
+     * @param textField 감지할 TextField
+     * @param oldVal oldVal
+     * @param newVal newVal
+     */
+    private void detectString(TextField textField, String oldVal, String newVal) {
+
+        if(newVal.length() == 0) return;    /* 아무것도 입력된 것이 없을 경우, 메소드 종료 */
+
+		char[] charArray = newVal.toCharArray();
+		if (charArray.length > 13) {
+			// 13자리 넘지 못하게 함.
+			textField.setText(oldVal);
+		}
+        for (char i : charArray) {
+            if (!('0' <= i && i <= '9')) {
+                // 정수 아닌 값이 입력되었을 경우, 전의 값으로 되돌아 감.
+                textField.setText(oldVal);
+            }
+        }
+    }
 }

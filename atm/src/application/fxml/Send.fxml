@@ -28,7 +28,7 @@
                      </content>
                   </ScrollPane>
                   <TextField layoutX="8.0" layoutY="219.0" prefHeight="35.0" prefWidth="245.0" promptText="Password" />
-                  <TextField fx:id="Amount" layoutX="8.0" layoutY="169.0" prefHeight="31.0" prefWidth="182.0" promptText="How much?" />
+                  <TextField layoutX="8.0" layoutY="169.0" prefHeight="31.0" prefWidth="182.0" promptText="How much?" />
                   <Button fx:id="send" layoutX="201.0" layoutY="271.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="54.0" text="OK" />
                   <Label layoutX="158.0" layoutY="100.0" prefHeight="42.0" prefWidth="89.0">
                      <font>
@@ -50,7 +50,7 @@
             </AnchorPane>
          </top>
          <bottom>
-            <AnchorPane fx:id="message" prefHeight="125.0" prefWidth="396.0" BorderPane.alignment="CENTER">
+            <AnchorPane  prefHeight="125.0" prefWidth="396.0" BorderPane.alignment="CENTER">
                <children>
                   <Button fx:id="backtoMainmenu" layoutX="14.0" layoutY="63.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="127.0" text="Go Back" />
                   <Label layoutX="37.0" layoutY="-3.0" prefHeight="35.0" prefWidth="223.0">

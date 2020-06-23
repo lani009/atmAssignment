@@ -47,10 +47,14 @@ public class DepositController implements Initializable{
         String amount=Deposit.getText();
         String pw = Pw.getText();
         Account 가짜atm = dao.searchAccount("ATM", BankType.MDCBank);
+        
         Account transactionAccount = dao.getAccount(dao.getSelectedAccount());//** 계좌선택에서 받아온 계좌번호 가져오기
+        System.out.println(transactionAccount);
         if(dao.checkPassword(pw)) {// 입력한 비밀번호와 해당 Id에 대응되는 비밀번호를 비교
-            Transaction 예금 = new Transaction(TransactionType.DEPOSIT, transactionAccount, 가짜atm,
+            Transaction 예금 = new Transaction(TransactionType.DEPOSIT, 가짜atm, transactionAccount,
                 BigInteger.valueOf(Integer.parseInt(amount)));
+
+            System.out.println(예금);
 
             dao.sendTransaction(예금); // 거래를 처리
         }

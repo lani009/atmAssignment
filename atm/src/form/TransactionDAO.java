@@ -78,7 +78,19 @@ public class TransactionDAO {
     }
 
     /**
-     * DAO 인스턴스를 리턴한다. 로그인되어 있을 시에만 사용가능하다.
+     * 유저가 로그인 한 상태인지, 아닌지 리턴
+     * @return 로그인된 여부
+     */
+    public static boolean isLoggedIn() {
+        if(instance == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * 로그인 된 상태의 DAO 인스턴스를 리턴한다. 로그인되어 있을 시에만 사용가능하다.
      * 
      * @return TransactionDAO instance
      */
@@ -99,9 +111,9 @@ public class TransactionDAO {
         if (instance == null) {
             throw new IllegalStateException("You Must be logged in before calling logout() method.");
         }
-        instance = null;
         instance.socket.close();
         instance.socket = null;
+        instance = null;
     }
 
     /**
@@ -141,7 +153,20 @@ public class TransactionDAO {
     }
 
     /**
+     * 계좌선택 화면에서 고객이 선택한 계좌를 받아온다.
+     * <strong>하이픈</strong>이 붙은 상태로 리턴한다.
+     * @return selectedAccount 선택된 계좌(하이픈 추가)
+     */
+    public String getSelectedDashedAccount() {
+        StringBuffer sBuffer = new StringBuffer(getSelectedAccount());
+        sBuffer.insert(3, '-');
+        sBuffer.insert(8, '-');
+        return sBuffer.toString();
+    }
+
+    /**
      * 로그인 창에서 고객이 선택한 은행을 set할 때 사용.
+     * @param bType 은행 종류
      */
     public void setSelectedBankType(BankType bType) {
         this.selectedBankType = bType;
@@ -180,14 +205,17 @@ public class TransactionDAO {
 
     /**
      * 거래를 진행하면서, 고객의 비밀번호가 맞는지 틀린지를 bool타입으로 리턴
-     * @param pw
+     * @param pw 비밀번호
      * @return 비밀번호 일치 여부
      */
     public boolean checkPassword(String pw) {
         try {
+            System.out.println("send");
             socket.send("check password");
             socket.send(pw);
-            return socket.recv().equals("true");
+            String a = socket.recv();
+            System.out.println(a);
+            return a.equals("true");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -198,14 +226,15 @@ public class TransactionDAO {
      * 데이터베이스로 부터 나의 거래 내역을 리턴. 만약 거래 내역이 없다면, null을 리턴한다. <br><strong>서버랑 직접적으로 통신하는 메소드이므로, 너무 많이 호출하지 말것!</strong>
      * 
      * @return 거래_내역
-     * @throws ServerNotActiveException
+     * @throws ServerNotActiveException 서버 연결 강제 종료
      */
     @SuppressWarnings ("unchecked") // Serializable type unchecked 경고 무시
     public Transaction[] getTransactionList() throws ServerNotActiveException {
         try {
             socket.send("get my transaction list");
-
+            socket.send(getSelectedAccount());
             String oString = socket.recv();
+
             if(oString.equals("no such data")) {
                 return null;
             }
@@ -226,17 +255,15 @@ public class TransactionDAO {
      * 데이터베이스로 부터 나의 계좌 목록을 받음. &#10;<strong>서버랑 직접적으로 통신하는 메소드이므로, 너무 많이 호출하지 말것!</strong>
      * 
      * @return 계좌_목록
-     * @throws ServerNotActiveException
-     * @throws NumberFormatException
+     * @throws ServerNotActiveException 서버 연결 강제 종료
      */
-    public Account[] getAccountList() throws NumberFormatException, ServerNotActiveException {
+    public Account[] getAccountList() throws ServerNotActiveException {
         try {
             socket.send("get my account list");
             String serialized;  // 직렬화된 String이 저장될 변수
 
             ArrayList<Account> accountArrayList = new ArrayList<>();
             while(!(serialized = socket.recv()).equals("-1")) {
-                System.out.println(serialized);
 
                 Object objectMember = getObject(serialized);
                 accountArrayList.add((Account) objectMember);   // Array List에 저장
@@ -253,9 +280,9 @@ public class TransactionDAO {
     /**
      * 나의 계좌중, index번 째 계좌를 받아올 수 있음.
      * 
-     * @param index
+     * @param index 인덱스
      * @return 계좌_객체
-     * @throws ServerNotActiveException
+     * @throws ServerNotActiveException 서버 연결 강제 종료
      */
     public Account getAccount(int index) throws ServerNotActiveException {
         return getAccountList()[index];
@@ -283,7 +310,7 @@ public class TransactionDAO {
     /**
      * 거래를 요청하는 메소드.
      * 
-     * @param transaction
+     * @param transaction 거래
      */
     public void sendTransaction(Transaction transaction) {
         try {

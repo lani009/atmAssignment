@@ -45,7 +45,7 @@ public class LoginController implements Initializable {
     private RadioButton NHBank;
     @FXML
     private RadioButton AJOUBank;
-    private int Type = 1;
+    private int Type = 0;
 
     /**
      * 로그인 을 위한 이벤트이다. 입력한 Id,Pw를 String type으로 변환 후 TransactionDAO.login을 통해 서버에
@@ -56,6 +56,19 @@ public class LoginController implements Initializable {
     public void LoginAction(ActionEvent event) throws LoginException {
         String ID = Id.getText();
         String PW = Pw.getText();
+        
+        if((ID.equals("ID")) && (PW.equals("Password"))) {
+            status.setText("ID와 Password를 입력하세요.");
+                return ;
+        }else {
+            if(ID.equals("ID")) {
+                status.setText("ID를 입력하세요.");
+                return ;
+            }else if(PW.equals("Password")){
+                status.setText("Password를 입력하세요.");
+                return ;
+            }
+        }
         String BANK = "";
         if (Type == 1) {
             BANK = "MDCBank";
@@ -65,12 +78,15 @@ public class LoginController implements Initializable {
             BANK = "NHBank";
         } else if (Type == 4) {
             BANK = "AJOUBank";
+        } else if (Type == 0) {
+            status.setText("Please select Bank");
+            return;
         }
         TransactionDAO.login(ID, PW, BankType.valueOf(BANK));
         status.setText("Login Success");
         Parent login;
         try {
-            login = FXMLLoader.load(getClass().getResource("fxml/Mainmenu.fxml"));   // 메인화면 연결
+            login = FXMLLoader.load(getClass().getResource("fxml/AccountChoose.fxml"));   // 메인화면 연결
             Scene scene = new Scene(login);
             Stage primaryStage = (Stage)sgin.getScene().getWindow();
             primaryStage.setScene(scene);
@@ -88,7 +104,7 @@ public class LoginController implements Initializable {
                 try {
                     LoginAction(event);
                 } catch (LoginException e) {
-                   status.setText("Login Failed!");
+                    e.getStackTrace();
                 }
             }});
             

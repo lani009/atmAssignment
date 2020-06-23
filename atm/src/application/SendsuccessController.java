@@ -2,9 +2,11 @@ package application;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.server.ServerNotActiveException;
 import java.util.ResourceBundle;
 
-import form.Account;
+import javax.security.auth.login.AccountNotFoundException;
+
 import form.Transaction;
 import form.TransactionDAO;
 import javafx.fxml.FXML;
@@ -20,7 +22,7 @@ public class SendsuccessController implements Initializable {
 	@FXML
 	private Label name;
 	@FXML
-	private Label Account;
+	private Label Account;	// TODO 이름 수정
 	@FXML
 	private Label money;
 	@FXML
@@ -32,12 +34,18 @@ public class SendsuccessController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		dao = TransactionDAO.getInstance();
-		Account transaction = dao.getAccount(""); //TODO 계좌 정보를 불러오는 메소드 필요
-		name.setText(dao.getUserId());//TODO 괄호 안에 id를 불러오는 메소드 필요 
-		Account.setText(dao.getSelectedAccount());//TODO 괄호 안에 계좌번호를 불러오는 메소드 필요 
-		SendController c = new SendController();
-		money.setText(c.Money());//TODO 괄호 안에 송금액를 불러오는 메소드 필요 (sendController에서 불러와야 되는데 이렇게 해도 되는지 모르겠다)
-		balance.setText("");//TODO 괄호 안에 id를 불러오는 메소드 필요 
+		Transaction previousTransaction = dao.getPreviousTransaction();
+
+		name.setText(previousTransaction.getTo().getBankType().toString());
+		Account.setText(previousTransaction.getTo().getAccountNumber());
+		// SendController c = new SendController();
+
+		money.setText(previousTransaction.getAmount().toString());
+		try {
+			balance.setText(dao.getAccount(previousTransaction.getFrom().getAccountNumber()).getBalance().toString());
+		} catch (AccountNotFoundException | ServerNotActiveException e2) {
+			e2.printStackTrace();
+		}
 		backtoMainmenu.setOnAction(e -> {
 			Parent login;
 			try {
