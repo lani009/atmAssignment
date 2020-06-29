@@ -4,6 +4,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 
+/**
+ * 거래내역조회 창에서 Table Row형태로 출력할 수 있게끔 해주는 모델.
+ */
 public class TableRowModel {
 	@FXML
 	private StringProperty num;

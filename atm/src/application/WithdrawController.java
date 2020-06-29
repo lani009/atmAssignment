@@ -26,7 +26,6 @@ public class WithdrawController implements Initializable{
     private TextField Withdraw;
     @FXML
     private TextField Pw;
-    
     @FXML
     private Button Ok;
     @FXML

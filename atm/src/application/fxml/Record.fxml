@@ -23,11 +23,6 @@
                         <TableColumn fx:id="balance" prefWidth="126.39996337890625" text="balance" />
                     </columns>
                   </TableView>
-                  <Label layoutX="9.0" layoutY="2.0" prefHeight="30.0" prefWidth="261.0" text="transactional information ">
-                     <font>
-                        <Font name="System Bold" size="23.0" />
-                     </font>
-                  </Label>
                </children>
             </AnchorPane>
         </content>
@@ -36,5 +31,15 @@
          <font>
             <Font name="Cambria" size="18.0" />
          </font></Button>
+      <Label prefHeight="30.0" prefWidth="261.0" text="transactional information ">
+         <font>
+            <Font name="System Bold" size="23.0" />
+         </font>
+      </Label>
+      <Label fx:id="message" layoutX="17.0" layoutY="242.0" prefHeight="54.0" prefWidth="367.0">
+         <font>
+            <Font name="Cambria" size="22.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

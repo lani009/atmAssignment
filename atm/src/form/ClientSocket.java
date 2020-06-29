@@ -80,7 +80,6 @@ public class ClientSocket implements Closeable {
             bw.flush();
         } catch (IOException e) {
             e.printStackTrace();
-            // TODO 재접속 코드
         }
 
     }

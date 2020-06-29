@@ -82,8 +82,9 @@ public class LoginController implements Initializable {
             status.setText("Please select Bank");
             return;
         }
-        TransactionDAO.login(ID, PW, BankType.valueOf(BANK));
-        status.setText("Login Success");
+        TransactionDAO.login(ID, PW, BankType.valueOf(BANK));   // 로그인 실패시 LoginException으로 넘어감
+            status.setText("Login Success");
+        
         Parent login;
         try {
             login = FXMLLoader.load(getClass().getResource("fxml/AccountChoose.fxml"));   // 메인화면 연결
@@ -104,7 +105,8 @@ public class LoginController implements Initializable {
                 try {
                     LoginAction(event);
                 } catch (LoginException e) {
-                    e.getStackTrace();
+                    // 로그인 실패했을 경우
+                    status.setText("Login Failed");
                 }
             }});
             
