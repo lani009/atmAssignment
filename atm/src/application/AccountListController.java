@@ -1,18 +1,16 @@
 package application;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.URL;
 import java.rmi.server.ServerNotActiveException;
 import java.util.ResourceBundle;
 
 import form.Account;
 import form.TransactionDAO;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -24,7 +22,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class AccountListController implements Initializable {
-    private int controll = 0;
     @FXML
     private Button select1;
     @FXML
@@ -71,30 +68,6 @@ public class AccountListController implements Initializable {
     private GridPane grid;
 
     private TransactionDAO dao = TransactionDAO.getInstance();
-
-    // public void select1(ActionEvent event) throws Exception {
-    //     goToMainMenu(AccountNumber1.getText());
-    // }
-
-    // public void select2(ActionEvent event) throws Exception {
-    //     goToMainMenu(AccountNumber2.getText());
-    // }
-
-    // public void select3(ActionEvent event) throws Exception {
-    //     goToMainMenu(AccountNumber3.getText());
-    // }
-
-    // public void select4(ActionEvent event) throws Exception {
-    //     goToMainMenu(AccountNumber4.getText());
-    // }
-
-    // public void select5(ActionEvent event) throws Exception {
-    //     goToMainMenu(AccountNumber5.getText());
-    // }
-
-    // public void select6(ActionEvent event) throws Exception {
-    //     goToMainMenu(AccountNumber6.getText());
-    // }
 
     /**
      * 메인 메뉴로 화면전환
@@ -144,7 +117,7 @@ public class AccountListController implements Initializable {
             for (Pane pane : list) {
                 if(myAccounts.length > i) {
                     Account temp = myAccounts[i++];
-                    ((Label) pane.getChildren().get(1)).setText(temp.getBalance().toString());
+                    ((Label) pane.getChildren().get(1)).setText(temp.getBalance().toString() + "원");
                     ((Label) pane.getChildren().get(4)).setText(temp.getDashedAccountNumber());
                     ((Button) pane.getChildren().get(5)).setOnAction(e -> {
                         try {

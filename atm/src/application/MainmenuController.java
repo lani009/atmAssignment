@@ -2,12 +2,8 @@ package application;
 
 import java.io.IOException;
 import java.net.URL;
-import java.rmi.server.ServerNotActiveException;
 import java.util.ResourceBundle;
 
-import javax.security.auth.login.AccountNotFoundException;
-
-import form.Account;
 import form.TransactionDAO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

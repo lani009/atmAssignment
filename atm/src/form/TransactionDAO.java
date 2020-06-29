@@ -234,7 +234,6 @@ public class TransactionDAO {
             socket.send("get my transaction list");
             socket.send(getSelectedAccount());
             String oString = socket.recv();
-
             if(oString.equals("no such data")) {
                 return null;
             }

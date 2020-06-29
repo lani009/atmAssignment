@@ -47,24 +47,30 @@ public class SendController implements Initializable {
 	Label Bank;
 	@FXML
 	TextField pw;
+	@FXML
+	Label selectedBankType;
 
 	private int num = 0;
 
 	TransactionDAO dao = TransactionDAO.getInstance();;
 
 	public void MDCBankAction(ActionEvent e) {
+		selectedBankType.setText("MDCBank selected");
 		num = 1;
 	}
 
 	public void KAKAOBankAction(ActionEvent e) {
+		selectedBankType.setText("KAKAOBank selected");
 		num = 2;
 	}
 
 	public void NHBankAction(ActionEvent e) {
+		selectedBankType.setText("NHBank selected");
 		num = 3;
 	}
 
 	public void AJOUBankAction(ActionEvent e) {
+		selectedBankType.setText("AJOUBank selected");
 		num = 4;
 	}
 
@@ -125,7 +131,11 @@ public class SendController implements Initializable {
 
 		Account.textProperty().addListener((observable, oldVal, newVal) -> {
             detectString(Account, oldVal, newVal);
-        });
+		});
+		
+		Amount.textProperty().addListener((observable, oldVal, newVal) -> {
+            detectString(Amount, oldVal, newVal);
+		});
 
 		backtoMainmenu.setOnAction(e -> {
 			Parent login;

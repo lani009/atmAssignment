@@ -35,6 +35,11 @@
                         <Font name="Cambria" size="18.0" />
                      </font>
                   </Label>
+                  <Label fx:id="selectedBankType" layoutX="146.0" layoutY="108.0" text="Not Selected">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
          </center>
@@ -50,7 +55,7 @@
             </AnchorPane>
          </top>
          <bottom>
-            <AnchorPane  prefHeight="125.0" prefWidth="396.0" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="125.0" prefWidth="396.0" BorderPane.alignment="CENTER">
                <children>
                   <Button fx:id="backtoMainmenu" layoutX="14.0" layoutY="63.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="127.0" text="Go Back" />
                   <Label layoutX="37.0" layoutY="-3.0" prefHeight="35.0" prefWidth="223.0">

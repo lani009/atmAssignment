@@ -103,7 +103,7 @@
                                  </font>
                               </Text>
                               <Label fx:id="AccountNumber5" layoutX="98.0" layoutY="53.0" prefHeight="24.0" prefWidth="287.0" text="????" />
-                              <Button fx:id="select5" layoutX="86.0" layoutY="16.0" mnemonicParsing="false" onAction="#select5" text="선택_5" />
+                              <Button fx:id="select5" layoutX="86.0" layoutY="16.0" mnemonicParsing="false" text="선택_5" />
                            </children>
                         </Pane>
                         <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;" GridPane.columnIndex="1">
@@ -129,7 +129,7 @@
                                  </font>
                               </Text>
                               <Label fx:id="AccountNumber2" layoutX="98.0" layoutY="53.0" prefHeight="24.0" prefWidth="287.0" text="????" />
-                              <Button fx:id="select2" layoutX="80.0" layoutY="16.0" mnemonicParsing="false" onAction="#select2" text="선택_2" />
+                              <Button fx:id="select2" layoutX="80.0" layoutY="16.0" mnemonicParsing="false" text="선택_2" />
                            </children>
                         </Pane>
                         <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -155,7 +155,7 @@
                                  </font>
                               </Text>
                               <Label fx:id="AccountNumber4" layoutX="98.0" layoutY="53.0" prefHeight="24.0" prefWidth="287.0" text="????" />
-                              <Button fx:id="select4" layoutX="79.0" layoutY="15.0" mnemonicParsing="false" onAction="#select4" prefHeight="22.0" prefWidth="53.0" text="선택_4" />
+                              <Button fx:id="select4" layoutX="79.0" layoutY="15.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="53.0" text="선택_4" />
                            </children>
                         </Pane>
                         <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -181,7 +181,7 @@
                                  </font>
                               </Text>
                               <Label fx:id="AccountNumber6" layoutX="98.0" layoutY="53.0" prefHeight="24.0" prefWidth="287.0" text="????" />
-                              <Button fx:id="select6" layoutX="80.0" layoutY="21.0" mnemonicParsing="false" onAction="#select6" text="선택_6" />
+                              <Button fx:id="select6" layoutX="80.0" layoutY="21.0" mnemonicParsing="false" text="선택_6" />
                            </children>
                         </Pane>
                      </children>
