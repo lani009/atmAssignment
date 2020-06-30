@@ -7,7 +7,6 @@ import java.util.ResourceBundle;
 
 import form.Transaction;
 import form.TransactionDAO;
-import form.Enum.TransactionType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -52,18 +51,25 @@ public class RecordController implements Initializable{
 			}
 			
 			for (Transaction transaction : transactionList) {
-				if(transaction.getTransactionType() == TransactionType.TRANSFER) {
-					// 나 -> 타인일 때 리스트에 추가 
-					list.add(new TableRowModel(String.format("%d", i), transaction.getTransactionType().toString(), transaction.getTo().getAccountNumber().toString(),
-							transaction.getAmount().toString(), transaction.getFrom().getBalance().toString()));
-				}
-				// 그 밖의 상황일 때 리스트에 추가
-				else
-					list.add(new TableRowModel("0", transaction.getTransactionType().toString(),"",
-						transaction.getAmount().toString(), transaction.getFrom().getBalance().toString()));
-				//번호 증가
-				i++;
+				switch (transaction.getTransactionType()) {
+					case DEPOSIT:
+						list.add(new TableRowModel(String.valueOf(i), transaction.getTransactionType().toString(),"",
+						transaction.getAmount().toString(), transaction.getTo().getBalance().toString()));
+						break;
 				
+					case TRANSFER:
+						// 나 -> 타인일 때 리스트에 추가 
+						list.add(new TableRowModel(String.valueOf(i), transaction.getTransactionType().toString(), transaction.getTo().getDashedAccountNumber(),
+						transaction.getAmount().toString(), transaction.getFrom().getBalance().toString()));
+						break;
+					case WITHDRAWL:
+						list.add(new TableRowModel(String.valueOf(i), transaction.getTransactionType().toString(), transaction.getTo().getDashedAccountNumber(),
+								"-" + transaction.getAmount().toString(), transaction.getFrom().getBalance().toString()));
+					default:
+						break;
+				}
+				//번호 증가
+				i++;	
 			}
 		} catch (ServerNotActiveException e) {
 			e.printStackTrace();

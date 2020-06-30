@@ -210,11 +210,9 @@ public class TransactionDAO {
      */
     public boolean checkPassword(String pw) {
         try {
-            System.out.println("send");
             socket.send("check password");
             socket.send(pw);
             String a = socket.recv();
-            System.out.println(a);
             return a.equals("true");
         } catch (IOException e) {
             e.printStackTrace();

@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import form.Account;
@@ -46,17 +47,28 @@ public class DepositController implements Initializable{
     public void OkAction(ActionEvent event) throws Exception{
         String amount=Deposit.getText();
         String pw = Pw.getText();
-        Account 가짜atm = dao.searchAccount("ATM", BankType.MDCBank);
+        if(amount.isEmpty()) {
+            status.setTextFill(Color.valueOf("#f00a0a"));
+            status.setText("Pleas input Amount!");
+            return;
+        }
+        if(pw.isEmpty()) {
+            status.setTextFill(Color.valueOf("#f00a0a"));
+            status.setText("Pleas input password!");
+            return;
+        }
+        Account ATM = dao.searchAccount("ATM", BankType.MDCBank);   // 가짜 ATM 객체
         
-        Account transactionAccount = dao.getAccount(dao.getSelectedAccount());//** 계좌선택에서 받아온 계좌번호 가져오기
-        System.out.println(transactionAccount);
+        Account transactionAccount = dao.getAccount(dao.getSelectedAccount());  // 계좌선택에서 받아온 계좌번호 가져오기
         if(dao.checkPassword(pw)) {// 입력한 비밀번호와 해당 Id에 대응되는 비밀번호를 비교
-            Transaction 예금 = new Transaction(TransactionType.DEPOSIT, 가짜atm, transactionAccount,
+            Transaction depositTransaction = new Transaction(TransactionType.DEPOSIT, ATM, transactionAccount,
                 BigInteger.valueOf(Integer.parseInt(amount)));
-
-            System.out.println(예금);
-
-            dao.sendTransaction(예금); // 거래를 처리
+            dao.sendTransaction(depositTransaction); // 거래를 처리
+        } else {
+            // 비밀번호를 틀린 경우임
+            status.setTextFill(Color.valueOf("#f00a0a"));
+            status.setText("Wrong Password!");
+            return;
         }
         Parent dere = FXMLLoader.load(getClass().getResource("fxml/Deposit_ok.fxml")); // 예금결과화면 연결
         Scene scene = new Scene(dere);
@@ -102,5 +114,9 @@ public class DepositController implements Initializable{
                 }
             }
         });
+
+        Deposit.textProperty().addListener((observable, oldVal, newVal) -> {
+            InputUtil.detectString(Deposit, oldVal, newVal);
+		});
     }
 }

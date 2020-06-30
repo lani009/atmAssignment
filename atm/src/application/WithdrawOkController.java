@@ -54,7 +54,7 @@ public class WithdrawOkController implements Initializable{
         try {
         Account transactionAccount = dao.getAccount(dao.getSelectedAccount());//** 계좌선택에서 받아온 계좌번호 가져오기
         BankName.setText(String.valueOf(transactionAccount.getBankType()));
-        AccountNumber.setText(transactionAccount.getAccountNumber());
+        AccountNumber.setText(transactionAccount.getDashedAccountNumber());
         Withdrawamount.setText(String.valueOf(previous.getAmount()));// 출금한 금액이 얼만지 가져오기
         Balance.setText(String.valueOf(transactionAccount.getBalance()));
         }catch(Exception e){
