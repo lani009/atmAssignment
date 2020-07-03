@@ -1,7 +1,6 @@
 package application;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.net.URL;
 import java.rmi.server.ServerNotActiveException;
 import java.util.ResourceBundle;
@@ -110,7 +109,7 @@ public class AccountListController implements Initializable {
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         try {
-            Account[] myAccounts = dao.getAccountList();
+            Account[] myAccounts = dao.getAccountList();    // 내 계좌 목록 받아오기
             Pane[] list = new Pane[6];
             grid.getChildren().toArray(list);
             int i = 0;

@@ -27,8 +27,8 @@
                         </AnchorPane>
                      </content>
                   </ScrollPane>
-                  <TextField layoutX="8.0" layoutY="219.0" prefHeight="35.0" prefWidth="245.0" promptText="Password" />
-                  <TextField layoutX="8.0" layoutY="169.0" prefHeight="31.0" prefWidth="182.0" promptText="How much?" />
+                  <TextField fx:id="pw" layoutX="8.0" layoutY="219.0" prefHeight="35.0" prefWidth="245.0" promptText="Password" />
+                  <TextField fx:id="Amount" layoutX="8.0" layoutY="169.0" prefHeight="31.0" prefWidth="182.0" promptText="How much?" />
                   <Button fx:id="send" layoutX="201.0" layoutY="271.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="54.0" text="OK" />
                   <Label layoutX="158.0" layoutY="100.0" prefHeight="42.0" prefWidth="89.0">
                      <font>

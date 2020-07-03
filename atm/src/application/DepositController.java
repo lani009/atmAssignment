@@ -101,6 +101,7 @@ public class DepositController implements Initializable{
                     OkAction(event);
                 } catch (Exception e) {
                    status.setText("Deposit Failed!");
+                   e.printStackTrace();
                 }
             }});
         

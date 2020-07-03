@@ -31,9 +31,7 @@ public class Transaction implements Serializable {
         this.transactionType = transactionType;
         this.from = from;
         this.to = to;
-        if(amount.compareTo(BigInteger.valueOf(0)) == -1) {
-            throw new IllegalArgumentException("Amount must be bigger than 0. Check Amount arg");
-        }
+
         this.amount = amount;
     }
 

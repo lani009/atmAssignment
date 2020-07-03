@@ -108,12 +108,19 @@ public class SendController implements Initializable {
 		send.setOnAction(e -> {
 			try {
 				Account transactionAccount = dao.getAccount(dao.getSelectedAccount());
+				//은행 선택이 되지 않았을 때 예외 처리
+				if(num==0) {
+					message.setText("The bank is not selected");
+					return;
+				}
 				Account opponentAccount = dao.searchAccount(Account.getText(), BankType.parseBank(num));
+				// 잔고가 부족할 때 예외 처리
 				if(transactionAccount.getBalance().compareTo(BigInteger.valueOf(Long.parseLong(Amount.getText()))) == -1) {
 					message.setText("The balance is lack");
 
 					return;
 				}
+				//비밀번호가 맞을 때 송금 실행
 				if (dao.checkPassword(pw.getText())) {
 					Transaction transaction = new Transaction(TransactionType.TRANSFER, transactionAccount,
 							opponentAccount, BigInteger.valueOf(Integer.parseInt(Amount.getText())));
@@ -124,17 +131,16 @@ public class SendController implements Initializable {
 			} catch (AccountNotFoundException | ServerNotActiveException e1) {
 				message.setText("Cannot find the account");
 				// 상대방의 계좌를 못 찾았을 경우임.
-				// TODO 추가로 잔고보다 송금하려는 금액이 많을 때 예외 처리
 			}
 
 		});
 
 		Account.textProperty().addListener((observable, oldVal, newVal) -> {
-            InputUtil.detectString(Account, oldVal, newVal);
+            detectString(Account, oldVal, newVal);
 		});
 		
 		Amount.textProperty().addListener((observable, oldVal, newVal) -> {
-            InputUtil.detectString(Amount, oldVal, newVal);
+            detectString(Amount, oldVal, newVal);
 		});
 
 		backtoMainmenu.setOnAction(e -> {
@@ -153,5 +159,26 @@ public class SendController implements Initializable {
 
 	}
 
+	/**
+     * 텍스트 필드에 non-int 타입의 값이 입력되는 것을 방지한다.
+     * @param textField 감지할 TextField
+     * @param oldVal oldVal
+     * @param newVal newVal
+     */
+    private void detectString(TextField textField, String oldVal, String newVal) {
 
+        if(newVal.length() == 0) return;    /* 아무것도 입력된 것이 없을 경우, 메소드 종료 */
+
+		char[] charArray = newVal.toCharArray();
+		if (charArray.length > 13) {
+			// 13자리 넘지 못하게 함.
+			textField.setText(oldVal);
+		}
+        for (char i : charArray) {
+            if (!('0' <= i && i <= '9')) {
+                // 정수 아닌 값이 입력되었을 경우, 전의 값으로 되돌아 감.
+                textField.setText(oldVal);
+            }
+        }
+    }
 }

@@ -13,6 +13,8 @@ public class LoginMain extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         try {
+            String javaVersion = System.getProperty("java.version");
+            String javafxVersion = System.getProperty("javafx.version");
             primaryStage.setTitle("Well Come!!");
             Parent root = FXMLLoader.load(getClass().getResource("fxml/login.fxml"));
             Scene scene = new Scene(root);

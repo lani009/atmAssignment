@@ -81,9 +81,9 @@ public class Authentication {
     /**
      * 유저 로그인 로그인 성공일 경우 true를 리턴한다.
      * 
-     * @param userId
-     * @param userPw
-     * @param bankType
+     * @param userId 유저 아이디
+     * @param userPw 유저 비밀번호
+     * @param bankType 유저 사용 은행 타입
      * @return 로그인 성공 여부
      */
     public boolean login(String userId, String userPw, String bankType) {
