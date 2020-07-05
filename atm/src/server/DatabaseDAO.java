@@ -416,15 +416,15 @@ public class DatabaseDAO implements Runnable, Closeable {
                         pstmtFrom.setString(3, transaction.getFrom().getBankType().name());
                         pstmtFrom.setString(4, transaction.getTo().getBankType().name());
                         pstmtFrom.setBigDecimal(5, new BigDecimal(amount.negate()));
-                        pstmtFrom.setString(6, transaction.getTo().getAccountNumber());
+                        pstmtFrom.setString(6, transaction.getFrom().getAccountNumber());
                         pstmtFrom.executeUpdate();
 
                         // 거래내역에 추가
                         pstmtTo = toConnection.prepareStatement("INSERT INTO history SELECT ?, ?, ?, ?, ?, balance FROM accounts WHERE accountNumber=?");
-                        pstmtTo.setString(1, transaction.getTo().getAccountNumber());
-                        pstmtTo.setString(2, transaction.getFrom().getAccountNumber());
-                        pstmtTo.setString(3, transaction.getTo().getBankType().name());
-                        pstmtTo.setString(4, transaction.getFrom().getBankType().name());
+                        pstmtTo.setString(1, transaction.getFrom().getAccountNumber());
+                        pstmtTo.setString(2, transaction.getTo().getAccountNumber());
+                        pstmtTo.setString(3, transaction.getFrom().getBankType().name());
+                        pstmtTo.setString(4, transaction.getTo().getBankType().name());
                         pstmtTo.setBigDecimal(5, new BigDecimal(amount));
                         pstmtTo.setString(6, transaction.getTo().getAccountNumber());
                         pstmtTo.executeUpdate();

@@ -38,7 +38,7 @@ public class RecordController implements Initializable {
 	private TableColumn<TableRowModel, String> balance;
 	@FXML
 	private Label message;
-	
+
 	private TransactionDAO dao = TransactionDAO.getInstance();
 
 	// 내용을 추가할 리스트 초기화
@@ -72,6 +72,7 @@ public class RecordController implements Initializable {
 
 			else
 				for (Transaction transaction : transactionList) {
+
 					// 거래내역 횟수가 일정 횟수 이상이 되면 제일 오래된 거래내역을 삭제하고 다음 거래내역을 출력
 					if (list.size() > 10) {
 						list.remove(0);
@@ -83,15 +84,17 @@ public class RecordController implements Initializable {
 
 					if (transaction.getTransactionType() == TransactionType.TRANSFER) {
 						// 나 -> 타인일 때 리스트에 추가
-						if (transaction.getFrom().getAccountNumber().equals(dao.getSelectedAccount()))
+						if (transaction.getFrom().getAccountNumber().equals(dao.getSelectedAccount())
+								&& transaction.getAmount().signum() == -1)
+							list.add(new TableRowModel(transaction.getTransactionType().toString(),
+									transaction.getTo().getBankType().toString(),
+									transaction.getTo().getAccountNumber().toString(),
+									transaction.getAmount().toString(), transaction.getFrom().getBalance().toString()));
+						else if (transaction.getTo().getAccountNumber().equals(dao.getSelectedAccount())
+								&& transaction.getAmount().signum() == 1) // 상대 -> 나 일 경우
 							list.add(new TableRowModel(transaction.getTransactionType().toString(),
 									transaction.getFrom().getBankType().toString(),
 									transaction.getFrom().getAccountNumber().toString(),
-									transaction.getAmount().toString(), transaction.getFrom().getBalance().toString()));
-						else	// 상대 -> 나 일 경우
-							list.add(new TableRowModel(transaction.getTransactionType().toString(),
-									transaction.getFrom().getBankType().toString(),
-									transaction.getTo().getAccountNumber().toString(),
 									transaction.getAmount().toString(), transaction.getTo().getBalance().toString()));
 					}
 					// 그 밖의 상황일 때 리스트에 추가
