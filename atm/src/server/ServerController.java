@@ -28,7 +28,7 @@ public class ServerController {
                 Socket client = null;
                 try {
                     client = server.accept();    // client Accept
-                    System.out.printf("Client Connected. IP: %s\n", client.getRemoteSocketAddress().toString());
+                    System.out.printf("##** Client Connected. IP: %s **##\n", client.getRemoteSocketAddress().toString());
                     client.setKeepAlive(true);  // TCP Kepp-Alive = true
 
                     // Thread 실행

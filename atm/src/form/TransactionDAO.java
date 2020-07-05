@@ -30,18 +30,26 @@ public class TransactionDAO {
      * 서버와의 통신을 담당하는 클래스
      */
     private ClientSocket socket = null;
-
     /**
-     * 계좌 선택
+     * 계좌 선택에서 선택한 계좌번호
      */
     private String selectedAccount = null;
-
+    /**
+     * 고객의 거래 은행 종류
+     */
     private BankType selectedBankType = null;
-
+    /**
+     * 고객이 바로 직전에 진행한 거래
+     */
     private Transaction previousTransaction = null;
-
+    /**
+     * 고객 ID
+     */
     private String userId;
 
+    /**
+     * 싱글톤패턴의 일부. 외부에서 인스턴스 생성하는 것을 방지.
+     */
     private TransactionDAO() {
     }
 
@@ -51,7 +59,7 @@ public class TransactionDAO {
      * @param id 고객 아이디
      * @param pw 고객 비밀번호
      * @param bankType 은행 종류
-     * @return instance TransactionDAO 객체
+     * @return TransactionDAO 객체
      * @throws LoginException 로그인 실패할 경우
      */
     public synchronized static TransactionDAO login(String id, String pw, BankType bankType) throws LoginException {
@@ -159,7 +167,7 @@ public class TransactionDAO {
      */
     public String getSelectedDashedAccount() {
         StringBuffer sBuffer = new StringBuffer(getSelectedAccount());
-        sBuffer.insert(3, '-');
+        sBuffer.insert(4, '-');
         sBuffer.insert(8, '-');
         return sBuffer.toString();
     }
@@ -189,7 +197,7 @@ public class TransactionDAO {
 
     /**
      * 고객이 마지막으로 전송한 거래를 받아온다.
-     * @return previousTransaction 이전에 진행한 거래
+     * @return previousTransaction 바로 직전에 진행한 거래
      */
     public Transaction getPreviousTransaction() {
         return this.previousTransaction;
@@ -223,8 +231,8 @@ public class TransactionDAO {
     /**
      * 데이터베이스로 부터 나의 거래 내역을 리턴. 만약 거래 내역이 없다면, null을 리턴한다. <br><strong>서버랑 직접적으로 통신하는 메소드이므로, 너무 많이 호출하지 말것!</strong>
      * 
-     * @return 거래_내역
-     * @throws ServerNotActiveException 서버 연결 강제 종료
+     * @return 거래 내역
+     * @throws ServerNotActiveException 서버 연결 강제 종료되었을 시
      */
     @SuppressWarnings ("unchecked") // Serializable type unchecked 경고 무시
     public Transaction[] getTransactionList() throws ServerNotActiveException {
@@ -235,8 +243,8 @@ public class TransactionDAO {
             if(oString.equals("no such data")) {
                 return null;
             }
-            Object objectMember = getObject(oString);  // 직렬화된 String
-            ArrayList<Transaction> list = (ArrayList<Transaction>) objectMember;   
+            Object objectMember = getObject(oString);  // 직렬화
+            ArrayList<Transaction> list = (ArrayList<Transaction>) objectMember;
             Transaction[] transactionList = new Transaction[list.size()];
             list.toArray(transactionList);
             return transactionList; // Transaction List 리턴
@@ -305,7 +313,7 @@ public class TransactionDAO {
     }
 
     /**
-     * 거래를 요청하는 메소드.
+     * 서버에 거래를 요청한다.
      * 
      * @param transaction 거래
      */
@@ -327,7 +335,7 @@ public class TransactionDAO {
 
     /**
      * 계좌 정보를 찾아서 Account 객체를 리턴한다. 계좌 정보를 찾지 못할 경우 AccountNotFoundException 예외를
-     * 발생시킨다. &nbsp;<strong>서버랑 직접적으로 통신하는 메소드이므로, 너무 많이 호출하지 말것!</strong>
+     * 발생시킨다. <strong>서버랑 직접적으로 통신하는 메소드이므로, 너무 많이 호출하지 말것!</strong>
      * 
      * @param accountNumber 계좌번호
      * @param banktype      은행종류
@@ -338,21 +346,17 @@ public class TransactionDAO {
     public Account searchAccount(String accountNumber, BankType banktype)
             throws AccountNotFoundException, ServerNotActiveException {
         if(accountNumber.equals("ATM")) {
+            // 요구하는 계좌가 ATM일 경우, 임의의 ATM 객체 리턴.
             return new Account("ATM", banktype, BigInteger.ZERO);
         }
-        try {
-            socket.send("search account");
-            socket.send(accountNumber);
-            socket.send(banktype.name());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        socket.send("search account");
+        socket.send(accountNumber);
+        socket.send(banktype.name());
 
         try {
             String serialized = socket.recv();
             if (serialized.equals("not found")) {
-                // 만약 서버로 부터 not found 를 응답받을 경우, 예외를 발생시킨다.
+                // 만약 서버로 부터 not found 를 응답받을 경우, 해당하는 계좌번호가 존재하지 않는 것임. 따라서 예외를 발생시킨다.
                 throw new AccountNotFoundException(
                         String.format("Cannot Find %s %s Account", accountNumber, banktype.name()));
             }

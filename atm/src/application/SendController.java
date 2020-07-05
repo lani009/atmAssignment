@@ -21,6 +21,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -46,7 +47,7 @@ public class SendController implements Initializable {
 	@FXML
 	Label Bank;
 	@FXML
-	TextField pw;
+	PasswordField pw;
 	@FXML
 	Label selectedBankType;
 
@@ -126,6 +127,9 @@ public class SendController implements Initializable {
 							opponentAccount, BigInteger.valueOf(Integer.parseInt(Amount.getText())));
 
 					dao.sendTransaction(transaction);
+				} else {
+					message.setText("Worng Password!");
+					return;
 				}
 				gotoNextPage();
 			} catch (AccountNotFoundException | ServerNotActiveException e1) {

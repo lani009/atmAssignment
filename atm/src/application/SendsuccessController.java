@@ -19,14 +19,29 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class SendsuccessController implements Initializable {
+	/**
+	 * 사용자 은행 타입
+	 */
 	@FXML
 	private Label name;
+	/**
+	 * 계좌번호
+	 */
 	@FXML
-	private Label Account;	// TODO 이름 수정
+	private Label Account;
+	/**
+	 * 거래 금액
+	 */
 	@FXML
 	private Label money;
+	/**
+	 * 거래 후 잔고
+	 */
 	@FXML
 	private Label balance;
+	/**
+	 * 메인화면으로 돌아가기 버튼
+	 */
 	@FXML
 	private Button backtoMainmenu;
 	private TransactionDAO dao;

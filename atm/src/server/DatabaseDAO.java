@@ -70,7 +70,7 @@ public class DatabaseDAO implements Runnable, Closeable {
     @Override
     public void run() {
         while (true) {
-            RequsetType requsetType = client.getPhase();
+            RequsetType requsetType = client.getPhase();    // 클라이언트 Request
             switch (requsetType) {
                 case TRANSACTION:
                     System.out.println("Transaction request");
@@ -107,6 +107,7 @@ public class DatabaseDAO implements Runnable, Closeable {
                         return;
                     }
             }
+            System.out.println();   // 개행 구분
         }
 
     }
@@ -122,7 +123,7 @@ public class DatabaseDAO implements Runnable, Closeable {
     }
 
     /**
-     * 은행별로 알맞은 Database Connection을 반환한다.
+     * 은행별로 알맞은 Database Connection을 반환한다. Connection Pool 재활용을 통해 메모리 낭비 막기 위한 로직
      * 
      * @throws SQLException
      */
@@ -324,7 +325,7 @@ public class DatabaseDAO implements Runnable, Closeable {
      */
     private synchronized void processTransaction() {
         try {
-            String serialized = client.recv(); // 직렬화된 String
+            String serialized = client.recv(); // 직렬화된 String<-Transaction객체가 직렬화된 상태로 전달 받게
 
             byte[] serializedMember = Base64.getDecoder().decode(serialized); // Base64 -> 바이트 배열로 변환
             try (ByteArrayInputStream bais = new ByteArrayInputStream(serializedMember);
@@ -415,7 +416,7 @@ public class DatabaseDAO implements Runnable, Closeable {
                         pstmtFrom.setString(3, transaction.getFrom().getBankType().name());
                         pstmtFrom.setString(4, transaction.getTo().getBankType().name());
                         pstmtFrom.setBigDecimal(5, new BigDecimal(amount.negate()));
-                        pstmtFrom.setString(6, transaction.getFrom().getAccountNumber());
+                        pstmtFrom.setString(6, transaction.getTo().getAccountNumber());
                         pstmtFrom.executeUpdate();
 
                         // 거래내역에 추가

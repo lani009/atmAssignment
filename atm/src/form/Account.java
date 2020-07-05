@@ -46,7 +46,7 @@ public class Account implements Serializable {
      */
     public String getDashedAccountNumber() {
         StringBuffer sBuffer = new StringBuffer(this.accountNumber);
-        sBuffer.insert(3, '-');
+        sBuffer.insert(4, '-');
         sBuffer.insert(8, '-');
         return sBuffer.toString();
     }

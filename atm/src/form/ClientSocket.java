@@ -80,7 +80,6 @@ public class ClientSocket implements Closeable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     /**
