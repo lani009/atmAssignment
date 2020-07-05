@@ -31,15 +31,13 @@ public class Transaction implements Serializable {
         this.transactionType = transactionType;
         this.from = from;
         this.to = to;
-        if(amount.compareTo(BigInteger.valueOf(0)) == -1) {
-            throw new IllegalArgumentException("Amount must be bigger than 0. Check Amount arg");
-        }
+
         this.amount = amount;
     }
 
     /**
      * 거래 종류 리턴
-     * @return transactionType 거래 종류
+     * @return 거래 종류
      */
     public TransactionType getTransactionType() {
         return this.transactionType;
@@ -47,7 +45,7 @@ public class Transaction implements Serializable {
 
     /**
      * 누가 보내는지 리턴
-     * @return from 누가 보내는지
+     * @return 누가 보내는지
      */
     public Account getFrom() {
         return this.from;
@@ -55,7 +53,7 @@ public class Transaction implements Serializable {
 
     /**
      * 누구에게 보내는지 리턴
-     * @return to 누구에게 보내는지
+     * @return 누구에게 보내는지
      */
     public Account getTo() {
         return this.to;
@@ -63,7 +61,7 @@ public class Transaction implements Serializable {
 
     /**
      * 얼마나 보내는지 리턴
-     * @return amount 금액
+     * @return 금액
      */
     public BigInteger getAmount() {
         return this.amount;

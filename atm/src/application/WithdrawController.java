@@ -1,8 +1,12 @@
 package application;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URL;
+import java.rmi.server.ServerNotActiveException;
 import java.util.ResourceBundle;
+
+import javax.security.auth.login.AccountNotFoundException;
 
 import form.Account;
 import form.Transaction;
@@ -19,9 +23,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class WithdrawController implements Initializable{
+public class WithdrawController implements Initializable {
     @FXML
     private TextField Withdraw;
     @FXML
@@ -33,30 +38,45 @@ public class WithdrawController implements Initializable{
     @FXML
     private Label status;
     private TransactionDAO dao = TransactionDAO.getInstance();
-    
+
     /**
-     * 출금 값 입력 후 OK입력 시 출금 결과화면 출력 이벤트이다.
-     * 출금하고자 하는 계좌로 부터 가짜 atm으로 돈을 송금시킴으로서 출금이 완료된다.
+     * 출금 값 입력 후 OK입력 시 출금 결과화면 출력 이벤트이다. 출금하고자 하는 계좌로 부터 가짜 atm으로 돈을 송금시킴으로서 출금이
+     * 완료된다.
+     * 
      * @param event
-     * @throws Exception
+     * @throws IOException
+     * @throws ServerNotActiveException
+     * @throws AccountNotFoundException
      */
-    public void OkAction(ActionEvent event) throws Exception{
+    public void OkAction(ActionEvent event) throws IOException, AccountNotFoundException, ServerNotActiveException {
         String amount=Withdraw.getText();
         String pw = Pw.getText();
-        //dao.getInstance();
-        Account 가짜atm = dao.searchAccount("ATM", BankType.MDCBank);
+        if(amount.isEmpty()) {
+            status.setTextFill(Color.valueOf("#f00a0a"));
+            status.setText("Please Input Amount!");
+            return;
+        }
+        if(pw.isEmpty()) {
+            status.setTextFill(Color.valueOf("#f00a0a"));
+            status.setText("Please Input Password!");
+            return;
+        }
+        Account fakeAtm = dao.searchAccount("ATM", BankType.MDCBank);
         Account transactionAccount = dao.getAccount(dao.getSelectedAccount());//** 계좌선택에서 받아온 계좌번호 가져오기
         if(dao.checkPassword(pw)) {// 입력한 비밀번호와 해당 ID에 대응되는 비밀번호를 비교
             if(transactionAccount.getBalance().compareTo(BigInteger.valueOf(Integer.parseInt(amount)))==-1) {
+                status.setTextFill(Color.valueOf("#f00a0a"));
                 status.setText("잔고가 부족합니다.");
-                
                 return ;
             }else {
-                Transaction 출금 = new Transaction(TransactionType.WITHDRAWL, transactionAccount, 가짜atm,
+                Transaction withdrawTransaction = new Transaction(TransactionType.WITHDRAWL, transactionAccount, fakeAtm,
                 BigInteger.valueOf(Integer.parseInt(amount)));
-
-                dao.sendTransaction(출금); // 거래를 처리
+                dao.sendTransaction(withdrawTransaction); // 거래를 처리
             }
+        } else {
+            status.setTextFill(Color.valueOf("#f00a0a"));
+            status.setText("Wrong Password!");
+            return;
         }
         
         Parent dere = FXMLLoader.load(getClass().getResource("fxml/Withdraw_ok.fxml")); // 출금결과화면 연결
@@ -68,9 +88,9 @@ public class WithdrawController implements Initializable{
     /**
      * Back 버튼 클릭 시 출금을 진행하지 않고 메인화면으로 이동
      * @param event
-     * @throws Exception
+     * @throws IOException
      */
-    public void BackAction(ActionEvent event) throws Exception{
+    public void BackAction(ActionEvent event) throws IOException {
         Parent main = FXMLLoader.load(getClass().getResource("fxml/Mainmenu.fxml")); // 메인화면 연결
         Scene scene = new Scene(main);
         Stage primaryStage = (Stage)Ok.getScene().getWindow();
@@ -100,6 +120,10 @@ public class WithdrawController implements Initializable{
                 }
             }
         });
+
+        Withdraw.textProperty().addListener((observable, oldVal, newVal) -> {
+            InputUtil.detectString(Withdraw, oldVal, newVal);
+		});
     }
 
 }

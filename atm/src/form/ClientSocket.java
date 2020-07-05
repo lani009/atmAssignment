@@ -41,7 +41,7 @@ public class ClientSocket implements Closeable {
         JSONParser parser = new JSONParser();
 
         // 서버 정보에 대한 데이터를 파싱한다.
-        try (FileReader reader = new FileReader("./atm/src/form/ServerProperties.json")) {
+        try (FileReader reader = new FileReader("./ServerProperties.json")) {
             JSONObject jsonObject = (JSONObject) parser.parse(reader);
             this.ip = (String) jsonObject.get("address");
             this.port = (String) jsonObject.get("port");
@@ -71,7 +71,6 @@ public class ClientSocket implements Closeable {
     /**
      * 서버에 String을 전송하기 위한 메소드
      * @param msg String메시지
-     * @throws IOException 서버 연결 강제 종료
      */
     public void send(String msg) {
         try {
@@ -81,7 +80,6 @@ public class ClientSocket implements Closeable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     /**

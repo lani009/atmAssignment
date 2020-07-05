@@ -54,21 +54,6 @@ public class LoginController implements Initializable {
      * Success"로 변경한다. 로그인 실패 시 에러를 throw하여 label을 "Login Failed!"로 변경한다.
      */
     public void LoginAction(ActionEvent event) throws LoginException {
-        String ID = Id.getText();
-        String PW = Pw.getText();
-        
-        if((ID.equals("ID")) && (PW.equals("Password"))) {
-            status.setText("ID와 Password를 입력하세요.");
-                return ;
-        }else {
-            if(ID.equals("ID")) {
-                status.setText("ID를 입력하세요.");
-                return ;
-            }else if(PW.equals("Password")){
-                status.setText("Password를 입력하세요.");
-                return ;
-            }
-        }
         String BANK = "";
         if (Type == 1) {
             BANK = "MDCBank";
@@ -82,12 +67,26 @@ public class LoginController implements Initializable {
             status.setText("Please select Bank");
             return;
         }
+        String ID = Id.getText();
+        String PW = Pw.getText();
+        if(ID.isEmpty() && PW.isEmpty()){
+            status.setText("ID와 Password를 입력하세요.");
+                return ;
+        }else {
+            if(ID.isEmpty()) {
+                status.setText("ID를 입력하세요.");
+                return ;
+            }else if(PW.isEmpty()){
+                status.setText("Password를 입력하세요.");
+                return ;
+            }
+        }
         TransactionDAO.login(ID, PW, BankType.valueOf(BANK));   // 로그인 실패시 LoginException으로 넘어감
             status.setText("Login Success");
         
         Parent login;
         try {
-            login = FXMLLoader.load(getClass().getResource("fxml/AccountChoose.fxml"));   // 메인화면 연결
+            login = FXMLLoader.load(getClass().getResource("fxml/AccountChoose.fxml"));  
             Scene scene = new Scene(login);
             Stage primaryStage = (Stage)sgin.getScene().getWindow();
             primaryStage.setScene(scene);
@@ -103,6 +102,7 @@ public class LoginController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 try {
+                    status.setText("please wait...");
                     LoginAction(event);
                 } catch (LoginException e) {
                     // 로그인 실패했을 경우

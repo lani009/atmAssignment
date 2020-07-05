@@ -12,6 +12,9 @@ import form.TransactionDAO;
 import form.Enum.BankType;
 import form.Enum.TransactionType;
 
+/**
+ * TransactionDAO 사용법 예제
+ */
 public class Example {
     public static void main(String[] args) throws ServerNotActiveException {
         String id = "asdf";

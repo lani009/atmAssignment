@@ -1,0 +1,9 @@
+// {type:deployment}
+[Controllers]-[TransactionDAO]
+[TransactionDAO]-[ClientSocket]
+[TransactionDAO]-[note:sendTransaction, searchAccount, ...etc]
+[ClientSocket]-[DatabaseDAO]
+[ServerController]-[DatabaseDAO]
+[ClientSocket]-[ServerController]
+[ClientConnectionSocket]-[DatabaseDAO]
+[ClientConnectionSocket]-[Authentication]

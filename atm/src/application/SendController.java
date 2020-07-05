@@ -21,6 +21,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -46,7 +47,7 @@ public class SendController implements Initializable {
 	@FXML
 	Label Bank;
 	@FXML
-	TextField pw;
+	PasswordField pw;
 	@FXML
 	Label selectedBankType;
 
@@ -108,23 +109,32 @@ public class SendController implements Initializable {
 		send.setOnAction(e -> {
 			try {
 				Account transactionAccount = dao.getAccount(dao.getSelectedAccount());
+				//은행 선택이 되지 않았을 때 예외 처리
+				if(num==0) {
+					message.setText("The bank is not selected");
+					return;
+				}
 				Account opponentAccount = dao.searchAccount(Account.getText(), BankType.parseBank(num));
+				// 잔고가 부족할 때 예외 처리
 				if(transactionAccount.getBalance().compareTo(BigInteger.valueOf(Long.parseLong(Amount.getText()))) == -1) {
 					message.setText("The balance is lack");
 
 					return;
 				}
+				//비밀번호가 맞을 때 송금 실행
 				if (dao.checkPassword(pw.getText())) {
 					Transaction transaction = new Transaction(TransactionType.TRANSFER, transactionAccount,
 							opponentAccount, BigInteger.valueOf(Integer.parseInt(Amount.getText())));
 
 					dao.sendTransaction(transaction);
+				} else {
+					message.setText("Worng Password!");
+					return;
 				}
 				gotoNextPage();
 			} catch (AccountNotFoundException | ServerNotActiveException e1) {
 				message.setText("Cannot find the account");
 				// 상대방의 계좌를 못 찾았을 경우임.
-				// TODO 추가로 잔고보다 송금하려는 금액이 많을 때 예외 처리
 			}
 
 		});

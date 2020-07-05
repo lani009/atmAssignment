@@ -70,7 +70,7 @@ public class DatabaseDAO implements Runnable, Closeable {
     @Override
     public void run() {
         while (true) {
-            RequsetType requsetType = client.getPhase();
+            RequsetType requsetType = client.getPhase();    // 클라이언트 Request
             switch (requsetType) {
                 case TRANSACTION:
                     System.out.println("Transaction request");
@@ -107,6 +107,7 @@ public class DatabaseDAO implements Runnable, Closeable {
                         return;
                     }
             }
+            System.out.println();   // 개행 구분
         }
 
     }
@@ -122,7 +123,7 @@ public class DatabaseDAO implements Runnable, Closeable {
     }
 
     /**
-     * 은행별로 알맞은 Database Connection을 반환한다.
+     * 은행별로 알맞은 Database Connection을 반환한다. Connection Pool 재활용을 통해 메모리 낭비 막기 위한 로직
      * 
      * @throws SQLException
      */
@@ -245,7 +246,7 @@ public class DatabaseDAO implements Runnable, Closeable {
                             new Account(rs.getString(1), client.getUserBankType(), rs.getBigDecimal(6).toBigInteger()),
                             new Account("ATM", client.getUserBankType(), BigInteger.ZERO),
                             rs.getBigDecimal(5).toBigInteger()));
-                } else if (rs.getString(1).equals(accountNumber)) {
+                } else if (rs.getString(1).equals(accountNumber) && rs.getBigDecimal(5).signum() == -1) {
                     // 계좌 이체의 경우 (나 -> 상대)
                     list.add(new Transaction(TransactionType.TRANSFER,
                             new Account(rs.getString(1), BankType.valueOf(rs.getString(3)),
@@ -253,7 +254,7 @@ public class DatabaseDAO implements Runnable, Closeable {
                             new Account(rs.getString(2), BankType.valueOf(rs.getString(4)), BigInteger.ZERO),
                             rs.getBigDecimal(5).toBigInteger()));
 
-                } else {
+                } else if (rs.getString(2).equals(accountNumber) && rs.getBigDecimal(5).signum() == 1) {
                     // 계좌 이체의 경우 (상대 -> 나)
                     list.add(new Transaction(TransactionType.TRANSFER,
                             new Account(rs.getString(1), BankType.valueOf(rs.getString(3)), BigInteger.ZERO),
@@ -324,7 +325,7 @@ public class DatabaseDAO implements Runnable, Closeable {
      */
     private synchronized void processTransaction() {
         try {
-            String serialized = client.recv(); // 직렬화된 String
+            String serialized = client.recv(); // 직렬화된 String<-Transaction객체가 직렬화된 상태로 전달 받게
 
             byte[] serializedMember = Base64.getDecoder().decode(serialized); // Base64 -> 바이트 배열로 변환
             try (ByteArrayInputStream bais = new ByteArrayInputStream(serializedMember);
@@ -336,6 +337,7 @@ public class DatabaseDAO implements Runnable, Closeable {
                 BigInteger amount = transaction.getAmount();
                 PreparedStatement pstmtTo, pstmtFrom;
                 Connection fromConnection, toConnection;
+                System.out.println(transaction);
                 switch (transaction.getTransactionType()) {
                     case DEPOSIT:
                         // 입금하는 경우이다. ATM -> 은행계좌
@@ -351,13 +353,13 @@ public class DatabaseDAO implements Runnable, Closeable {
                         pstmtTo.executeUpdate();
 
                         // 거래내역에 추가
-                        pstmtTo = toConnection.prepareStatement("INSERT INTO history VALUES (?, ?, ?, ?, ?, ?);");
+                        pstmtTo = toConnection.prepareStatement("INSERT INTO history SELECT ?, ?, ?, ?, ?, balance FROM accounts WHERE accountNumber=?");
                         pstmtTo.setString(1, transaction.getFrom().getAccountNumber());
                         pstmtTo.setString(2, transaction.getTo().getAccountNumber());
                         pstmtTo.setString(3, transaction.getFrom().getBankType().name());
                         pstmtTo.setString(4, transaction.getTo().getBankType().name());
                         pstmtTo.setBigDecimal(5, new BigDecimal(amount));
-                        pstmtTo.setBigDecimal(6, new BigDecimal(transaction.getTo().getBalance().add(amount)));
+                        pstmtTo.setString(6, transaction.getTo().getAccountNumber());
                         pstmtTo.executeUpdate();
 
                         pstmtTo.close();
@@ -377,13 +379,13 @@ public class DatabaseDAO implements Runnable, Closeable {
                         pstmtFrom.executeUpdate();
 
                         // 거래내역에 추가
-                        pstmtFrom = fromConnection.prepareStatement("INSERT INTO history VALUES (?, ?, ?, ?, ?, ?);");
+                        pstmtFrom = fromConnection.prepareStatement("INSERT INTO history SELECT ?, ?, ?, ?, ?, balance FROM accounts WHERE accountNumber=?");
                         pstmtFrom.setString(1, transaction.getFrom().getAccountNumber());
                         pstmtFrom.setString(2, transaction.getTo().getAccountNumber());
                         pstmtFrom.setString(3, transaction.getFrom().getBankType().name());
                         pstmtFrom.setString(4, transaction.getTo().getBankType().name());
                         pstmtFrom.setBigDecimal(5, new BigDecimal(amount.negate()));
-                        pstmtFrom.setBigDecimal(6, new BigDecimal(transaction.getTo().getBalance().subtract(amount)));
+                        pstmtFrom.setString(6, transaction.getFrom().getAccountNumber());
                         pstmtFrom.executeUpdate();
 
                         pstmtFrom.close();
@@ -408,23 +410,23 @@ public class DatabaseDAO implements Runnable, Closeable {
                         pstmtTo.executeUpdate(); // 쿼리 실행
 
                         // 거래내역에 추가
-                        pstmtFrom = fromConnection.prepareStatement("INSERT INTO history VALUES (?, ?, ?, ?, ?, ?);");
+                        pstmtFrom = fromConnection.prepareStatement("INSERT INTO history SELECT ?, ?, ?, ?, ?, balance FROM accounts WHERE accountNumber=?");
                         pstmtFrom.setString(1, transaction.getFrom().getAccountNumber());
                         pstmtFrom.setString(2, transaction.getTo().getAccountNumber());
                         pstmtFrom.setString(3, transaction.getFrom().getBankType().name());
                         pstmtFrom.setString(4, transaction.getTo().getBankType().name());
-                        pstmtFrom.setBigDecimal(5, new BigDecimal(amount));
-                        pstmtFrom.setBigDecimal(6, new BigDecimal(transaction.getFrom().getBalance().subtract(amount)));
+                        pstmtFrom.setBigDecimal(5, new BigDecimal(amount.negate()));
+                        pstmtFrom.setString(6, transaction.getFrom().getAccountNumber());
                         pstmtFrom.executeUpdate();
 
                         // 거래내역에 추가
-                        pstmtTo = toConnection.prepareStatement("INSERT INTO history VALUES (?, ?, ?, ?, ?);");
+                        pstmtTo = toConnection.prepareStatement("INSERT INTO history SELECT ?, ?, ?, ?, ?, balance FROM accounts WHERE accountNumber=?");
                         pstmtTo.setString(1, transaction.getFrom().getAccountNumber());
                         pstmtTo.setString(2, transaction.getTo().getAccountNumber());
                         pstmtTo.setString(3, transaction.getFrom().getBankType().name());
                         pstmtTo.setString(4, transaction.getTo().getBankType().name());
                         pstmtTo.setBigDecimal(5, new BigDecimal(amount));
-                        pstmtTo.setBigDecimal(6, new BigDecimal(amount.add(transaction.getTo().getBalance())));
+                        pstmtTo.setString(6, transaction.getTo().getAccountNumber());
                         pstmtTo.executeUpdate();
 
                         pstmtFrom.close();

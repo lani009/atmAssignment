@@ -8,26 +8,26 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="303.0" prefWidth="476.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.RecordController">
+<AnchorPane prefHeight="325.0" prefWidth="565.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.RecordController">
    <children>
-      <ScrollPane layoutX="-2.0" prefHeight="234.0" prefWidth="502.0">
+      <ScrollPane layoutX="-2.0" layoutY="30.0" prefHeight="204.0" prefWidth="567.0">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="482.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="550.0">
                <children>
-                  <TableView fx:id="table" layoutX="-1.0" layoutY="39.0" prefHeight="392.0" prefWidth="483.0">
+                  <TableView fx:id="table" layoutX="-1.0" prefHeight="450.0" prefWidth="547.0">
                     <columns>
-                        <TableColumn fx:id="num" prefWidth="56.79998779296875" text="number" />
-                      <TableColumn fx:id="kind" prefWidth="76.800048828125" text="kind" />
-                      <TableColumn fx:id="subject" prefWidth="93.5999755859375" text="subject" />
-                        <TableColumn fx:id="amount" prefWidth="127.99998474121094" text="amount" />
-                        <TableColumn fx:id="balance" prefWidth="126.39996337890625" text="balance" />
+                      <TableColumn fx:id="kind" prefWidth="93.60003662109375" text="kind" />
+                        <TableColumn fx:id="BankType" prefWidth="97.60003662109375" text="BankType" />
+                      <TableColumn fx:id="subject" prefWidth="123.19996643066406" text="subject" />
+                        <TableColumn fx:id="amount" prefWidth="113.5999755859375" text="amount" />
+                        <TableColumn fx:id="balance" prefWidth="115.99993896484375" text="balance" />
                     </columns>
                   </TableView>
                </children>
             </AnchorPane>
         </content>
       </ScrollPane>
-      <Button fx:id="backtoMainmenu" alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" layoutX="406.0" layoutY="253.0" mnemonicParsing="false" text="back in">
+      <Button fx:id="backtoMainmenu" alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" layoutX="450.0" layoutY="253.0" mnemonicParsing="false" text="back in">
          <font>
             <Font name="Cambria" size="18.0" />
          </font></Button>

@@ -1,0 +1,15 @@
+// {type:state}
+// {generate:true}
+(start)[Start]->(Client Program Running)
+(Client Program Running)->(Login Window)
+(Login Window)[login success]->(TransactionDAO instance Initiate)
+(Login Window)[login failed]->(Login Window)
+(TransactionDAO instance Initiate)->(Main menu Running)
+(Main menu Running)[Withdraw]->(Send Request)
+(Main menu Running)[Deposit]->(Send Request)
+(Main menu Running)[Transfer]->(Send Request)
+(Send Request)[Server Request]->(Server|Server Request Data Received)
+(Server|Server Request Data Received)[Process Request]->(Main menu Running)
+(Main menu Running)[Transactional List]->(Send Request)
+(Main menu Running)[Press Logout Button]->(Logout)->(Login Window)
+(end)

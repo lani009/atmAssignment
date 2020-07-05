@@ -20,7 +20,7 @@ public enum BankType {
     }
 
     /**
-     * int -> BankType
+     * int를 BankType로 파싱
      * @param n 순번
      * @return val 은행 종류
      */
@@ -37,7 +37,7 @@ public enum BankType {
     }
 
     /**
-     * BankType -> int
+     * BankType를 int로 파싱
      * @return num 은행 순번
      */
     public int toInt() {

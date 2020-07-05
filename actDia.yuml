@@ -1,0 +1,26 @@
+// {type:activity}
+(start)->(login)->(Choose Account)-><c>
+(login)->(end)
+<c>[chooseAccount1]->(Mainmenu)
+<c>[chooseAccount2]->(Mainmenu)
+<c>[chooseAccount3]->(Mainmenu)
+<c>[chooseAccount4]->(Mainmenu)
+<c>[chooseAccount5]->(Mainmenu)
+<c>[chooseAccount6]->(Mainmenu)
+(Mainmenu)->(end)
+(Mainmenu)->(Choose Account)
+(Mainmenu)-><a>
+<a>[Deposit]->(Deposit)
+(Deposit)->(DepositOk)
+(Deposit)->(Mainmenu)
+(DepositOk)->|b|->(Mainmenu)
+<a>[Withdraw]->(Withdraw)
+(Withdraw)->(WithdrawOk)
+(WithdrawOk)->|b|
+(Withdraw)->(Mainmenu)
+<a>[send]->(send)
+(send)->(SendSuccess)
+(SendSuccess)->|b|
+(send)->|b|(Mainmenu)
+<a>[Record]->(Record)
+(Record)->|b|
