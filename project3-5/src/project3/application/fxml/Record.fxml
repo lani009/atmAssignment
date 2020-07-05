@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="325.0" prefWidth="565.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project3.application.RecordController">
+   <children>
+      <ScrollPane layoutX="-2.0" layoutY="30.0" prefHeight="204.0" prefWidth="567.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="550.0">
+               <children>
+                  <TableView fx:id="table" layoutX="-1.0" prefHeight="450.0" prefWidth="547.0">
+                    <columns>
+                      <TableColumn fx:id="kind" prefWidth="93.60003662109375" text="kind" />
+                        <TableColumn fx:id="BankType" prefWidth="97.60003662109375" text="BankType" />
+                      <TableColumn fx:id="subject" prefWidth="123.19996643066406" text="subject" />
+                        <TableColumn fx:id="amount" prefWidth="113.5999755859375" text="amount" />
+                        <TableColumn fx:id="balance" prefWidth="115.99993896484375" text="balance" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+      <Button fx:id="backtoMainmenu" alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" layoutX="450.0" layoutY="253.0" mnemonicParsing="false" text="back in">
+         <font>
+            <Font name="Cambria" size="18.0" />
+         </font></Button>
+      <Label prefHeight="30.0" prefWidth="261.0" text="transactional information ">
+         <font>
+            <Font name="System Bold" size="23.0" />
+         </font>
+      </Label>
+      <Label fx:id="message" layoutX="17.0" layoutY="242.0" prefHeight="54.0" prefWidth="367.0">
+         <font>
+            <Font name="Cambria" size="22.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
